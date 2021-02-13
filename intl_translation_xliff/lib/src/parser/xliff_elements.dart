@@ -221,7 +221,7 @@ class UnitElement extends XliffElement {
     if (state.multilingual) {
       if (state.currentTargetTranslationMessage == null) {
         throw XliffParserException(
-            title: 'Not target message found.', context: 'In element <$key>');
+            title: 'No target message found.', context: 'In element <$key>');
       }
       state.targetMessages.messages[id] = BasicTranslatedMessage(
         id,
@@ -285,14 +285,20 @@ class SourceElement extends XliffElement {
 
   @override
   void parseTextChild(XmlTextEvent event) {
-    state.currentTranslationMessage ??= '';
-    state.currentTranslationMessage += event.text;
+    if (event.text != null && event.text.trim().isNotEmpty) {
+      state.currentTranslationMessage = event.text;
+    } else {
+      state.currentTranslationMessage = '';
+    }
   }
 
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
-    state.currentTranslationMessage ??= '';
-    state.currentTranslationMessage += event.text;
+    if (event.text != null && event.text.trim().isNotEmpty) {
+      state.currentTranslationMessage = event.text;
+    } else {
+      state.currentTranslationMessage = '';
+    }
   }
 }
 
@@ -310,14 +316,20 @@ class TargetElement extends XliffElement {
 
   @override
   void parseTextChild(XmlTextEvent event) {
-    state.currentTargetTranslationMessage ??= '';
-    state.currentTargetTranslationMessage += event.text;
+    if (event.text != null && event.text.trim().isNotEmpty) {
+      state.currentTargetTranslationMessage = event.text;
+    } else {
+      state.currentTargetTranslationMessage = '';
+    }
   }
 
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
-    state.currentTargetTranslationMessage ??= '';
-    state.currentTargetTranslationMessage += event.text;
+    if (event.text != null && event.text.trim().isNotEmpty) {
+      state.currentTargetTranslationMessage = event.text;
+    } else {
+      state.currentTargetTranslationMessage = '';
+    }
   }
 }
 
