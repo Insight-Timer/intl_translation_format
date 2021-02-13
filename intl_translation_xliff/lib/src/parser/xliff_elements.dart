@@ -33,24 +33,14 @@ class XliffRootElement extends XliffElement {
   @override
   bool get required => true;
 
-  String get sourceLanguageKey => {
-        XliffVersion.v1: 'source-language',
-        XliffVersion.v2: 'srcLang',
-      }[state.version];
-
-  String get targetLanguageKey => {
-        XliffVersion.v1: 'target-language',
-        XliffVersion.v2: 'trgLang',
-      }[state.version];
-
   @override
   Set<String> get requiredAttributes => {
         'version',
-        sourceLanguageKey,
+        if (state.version == XliffVersion.v2) ...{'srcLang'},
       };
   @override
   Set<String> get optionalAttributes => {
-        targetLanguageKey,
+        if (state.version == XliffVersion.v1) ...{'trgLang'},
         'xml:space',
       };
 
@@ -78,26 +68,27 @@ class XliffRootElement extends XliffElement {
           context: 'In element <xliff>');
     }
 
-    final srcLang = attributes[sourceLanguageKey];
-    final trgLang = attributes[targetLanguageKey];
+    if (state.version == XliffVersion.v2) {
+      final srcLang = attributes['srcLang'];
+      final trgLang = attributes['trgLang'];
 
-    if (state.sourceLocale != null && srcLang != state.sourceLocale) {
-      throw XliffParserException(
-          title:
-              'Invalid $sourceLanguageKey (source language) attribute: $srcLang.',
-          description:
-              '$sourceLanguageKey was expected to be ${state.sourceLocale} ',
-          context: 'In element <xliff>');
-    }
+      if (state.sourceLocale != null && srcLang != state.sourceLocale) {
+        throw XliffParserException(
+            title: 'Invalid \'srcLang\' (source language) attribute: $srcLang.',
+            description:
+                '\'srcLang\' was expected to be ${state.sourceLocale} ',
+            context: 'In element <xliff>');
+      }
 
-    if (trgLang != null) {
-      state.multilingual = true;
-    }
+      if (trgLang != null) {
+        state.multilingual = true;
+      }
 
-    state.sourceMessages = MessagesForLocale({}, locale: srcLang);
+      state.sourceMessages = MessagesForLocale({}, locale: srcLang);
 
-    if (state.multilingual) {
-      state.targetMessages = MessagesForLocale({}, locale: trgLang);
+      if (state.multilingual) {
+        state.targetMessages = MessagesForLocale({}, locale: trgLang);
+      }
     }
   }
 
@@ -137,7 +128,39 @@ class FileElement extends XliffElement {
   String get key => 'file';
 
   @override
+  Set<String> get requiredAttributes => {
+        if (state.version == XliffVersion.v1) ...{'source-language'},
+      };
+  @override
+  Set<String> get optionalAttributes => {
+        if (state.version == XliffVersion.v1) ...{'target-language'},
+      };
+
+  @override
   void onStart() {
+    if (state.version == XliffVersion.v1) {
+      final srcLang = attributes['source-language'];
+      final trgLang = attributes['target-language'];
+
+      if (state.sourceLocale != null && srcLang != state.sourceLocale) {
+        throw XliffParserException(
+            title:
+                'Invalid \'source-language\' (source language) attribute: $srcLang.',
+            description:
+                '\'source-language\' was expected to be ${state.sourceLocale} ',
+            context: 'In element <xliff>');
+      }
+
+      if (trgLang != null) {
+        state.multilingual = true;
+      }
+
+      state.sourceMessages = MessagesForLocale({}, locale: srcLang);
+
+      if (state.multilingual) {
+        state.targetMessages = MessagesForLocale({}, locale: trgLang);
+      }
+    }
     warn(
         'Multiple files will be omitted and all localization material will be grouped in a single file');
   }
