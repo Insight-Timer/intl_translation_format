@@ -35,7 +35,7 @@ class XliffFormat extends MultiLingualFormat {
 
 String generateTemplate(TranslationTemplate template, XliffVersion version) {
   final builder = XmlBuilder();
-  builder.processing('xml', 'version="1.0 encoding="UTF-8""');
+  builder.processing('xml', 'version="1.0" encoding="UTF-8"');
   builder.element('xliff', attributes: {
     ...attributesForVersion(version),
     if (version == XliffVersion.v1) ...{
