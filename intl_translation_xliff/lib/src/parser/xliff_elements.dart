@@ -286,7 +286,8 @@ class SourceElement extends XliffElement {
   @override
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTranslationMessage = event.text;
+      state.currentTranslationMessage =
+          event.text.replaceAll('\n          ', '').replaceAll('\n       ', '');
     } else {
       state.currentTranslationMessage = '';
     }
@@ -295,7 +296,8 @@ class SourceElement extends XliffElement {
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTranslationMessage = event.text;
+      state.currentTranslationMessage =
+          event.text.replaceAll('\n          ', '').replaceAll('\n       ', '');
     } else {
       state.currentTranslationMessage = '';
     }
@@ -317,7 +319,8 @@ class TargetElement extends XliffElement {
   @override
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTargetTranslationMessage = event.text;
+      state.currentTargetTranslationMessage =
+          event.text.replaceAll('\n          ', '').replaceAll('\n       ', '');
     } else {
       state.currentTargetTranslationMessage = '';
     }
@@ -326,7 +329,8 @@ class TargetElement extends XliffElement {
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTargetTranslationMessage = event.text;
+      state.currentTargetTranslationMessage =
+          event.text.replaceAll('\n          ', '').replaceAll('\n       ', '');
     } else {
       state.currentTargetTranslationMessage = '';
     }

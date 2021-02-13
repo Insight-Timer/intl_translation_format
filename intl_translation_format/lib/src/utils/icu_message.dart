@@ -160,7 +160,7 @@ String _turnInterpolationIntoICUForm(Message message, chunk,
     return shouldEscapeICU ? _escape(chunk) : chunk;
   }
   if (chunk is int && chunk >= 0 && chunk < message.arguments.length) {
-    return "{${message.arguments[chunk]}}";
+    return "<ph id=\"${chunk}\">{${message.arguments[chunk]}}</ph>";
   }
   if (chunk is SubMessage) {
     return chunk.expanded((message, chunk) =>

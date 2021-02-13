@@ -20,8 +20,11 @@ class XliffParser {
     String sourceLocale,
     String key,
   }) {
+    final xliffParsed = xliff
+        .replaceAll(RegExp("<\/ph>"), '')
+        .replaceAll(RegExp("<ph id=\".\">"), '');
     return XliffParserState(
-      parseEvents(xliff),
+      parseEvents(xliffParsed),
       key,
       version,
       displayWarnings: displayWarnings,
