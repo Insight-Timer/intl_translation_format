@@ -63,6 +63,7 @@ abstract class Element<T extends XmlParserState> {
   bool get allowsMultiple => true; //Not usable yet
 
   void parseTextChild(XmlTextEvent event) {}
+  void parseCDATAChild(XmlCDATAEvent event) {}
 
   Set<String> get requiredAttributes => {};
   Set<String> get optionalAttributes => {};
@@ -205,6 +206,8 @@ abstract class XmlParserState<T> {
         endElement(event);
       } else if (event is XmlTextEvent) {
         currentElement?.parseTextChild(event);
+      } else if (event is XmlCDATAEvent) {
+        currentElement?.parseCDATAChild(event);
       }
     }
     return value;

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:intl_translation_xliff/src/parser/xliff_parser.dart';
 import 'package:intl_translation_xliff/src/parser/xml_parser.dart';
+import 'package:xml/xml.dart';
 import 'package:xml/xml_events.dart';
 
 // http://docs.oasis-open.org/xliff/xliff-core/v2.0/xliff-core-v2.0.html
@@ -148,7 +151,7 @@ class FileElement extends XliffElement {
                 'Invalid \'source-language\' (source language) attribute: $srcLang.',
             description:
                 '\'source-language\' was expected to be ${state.sourceLocale} ',
-            context: 'In element <xliff>');
+            context: 'In element <file>');
       }
 
       if (trgLang != null) {
@@ -285,6 +288,12 @@ class SourceElement extends XliffElement {
     state.currentTranslationMessage ??= '';
     state.currentTranslationMessage += event.text;
   }
+
+  @override
+  void parseCDATAChild(XmlCDATAEvent event) {
+    state.currentTranslationMessage ??= '';
+    state.currentTranslationMessage += event.text;
+  }
 }
 
 /// The translation of the sibling <source> element.
@@ -301,6 +310,12 @@ class TargetElement extends XliffElement {
 
   @override
   void parseTextChild(XmlTextEvent event) {
+    state.currentTargetTranslationMessage ??= '';
+    state.currentTargetTranslationMessage += event.text;
+  }
+
+  @override
+  void parseCDATAChild(XmlCDATAEvent event) {
     state.currentTargetTranslationMessage ??= '';
     state.currentTargetTranslationMessage += event.text;
   }
