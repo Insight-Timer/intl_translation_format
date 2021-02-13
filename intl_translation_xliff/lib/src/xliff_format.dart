@@ -40,19 +40,46 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
     ...attributesForVersion(version),
     if (version == XliffVersion.v1) ...{
       'version': '1.2',
-      'source-language': template.defaultLocale,
     } else ...{
       'version': '2.0',
       'srcLang': template.defaultLocale,
     }
   }, nest: () {
-    builder.element('file', nest: () {
-      template.messages.forEach((key, message) {
-        final text = messageToIcuString(message);
-        if (version == XliffVersion.v2) {
-          builder.element('unit', attributes: {'id': key, 'name': key},
-              nest: () {
-            builder.element('segment', nest: () {
+    builder.element('file', attributes: {
+      'original': 'self',
+      if (version == XliffVersion.v1) ...{
+        'source-language': template.defaultLocale,
+      }
+    }, nest: () {
+      builder.element('body', nest: () {
+        template.messages.forEach((key, message) {
+          final text = messageToIcuString(message);
+          if (version == XliffVersion.v2) {
+            builder.element('unit', attributes: {'id': key, 'name': key},
+                nest: () {
+              builder.element('segment', nest: () {
+                builder.element('notes', nest: () {
+                  builder.element('note', attributes: {'category': 'format'},
+                      nest: () {
+                    builder.text('icu');
+                  });
+                  if (message.description != null) {
+                    builder.element('note',
+                        attributes: {'category': 'description'}, nest: () {
+                      builder.text(message.description);
+                    });
+                  }
+                });
+                builder.element('source', nest: () {
+                  builder.text(text);
+                });
+                builder.element('target', nest: () {
+                  builder.text('');
+                });
+              });
+            });
+          } else {
+            builder.element('trans-unit', attributes: {'id': key}, nest: () {
               builder.element('notes', nest: () {
                 builder.element('note', attributes: {'category': 'format'},
                     nest: () {
@@ -72,29 +99,8 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
                 builder.text('');
               });
             });
-          });
-        } else {
-          builder.element('trans-unit', attributes: {'id': key}, nest: () {
-            builder.element('notes', nest: () {
-              builder.element('note', attributes: {'category': 'format'},
-                  nest: () {
-                builder.text('icu');
-              });
-              if (message.description != null) {
-                builder.element('note', attributes: {'category': 'description'},
-                    nest: () {
-                  builder.text(message.description);
-                });
-              }
-            });
-            builder.element('source', nest: () {
-              builder.text(text);
-            });
-            builder.element('target', nest: () {
-              builder.text('');
-            });
-          });
-        }
+          }
+        });
       });
     });
   });
