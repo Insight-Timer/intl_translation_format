@@ -93,10 +93,10 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
                 }
               });
               builder.element('source', nest: () {
-                builder.text(text);
+                builder.cdata(text);
               });
               builder.element('target', nest: () {
-                builder.text('');
+                builder.cdata('');
               });
             });
           }
@@ -105,5 +105,12 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
     });
   });
   // ignore: deprecated_member_use
-  return builder.build().toXmlString(pretty: true).replaceAll('&lt;', '<');
+  return builder
+      .build()
+      .toXmlString(
+        pretty: true,
+      )
+      // .replaceAll('&lt;', '<')
+      .replaceAll('\n          <![CDATA', '<![CDATA')
+      .replaceAll(']]>\n        ', ']]>');
 }
