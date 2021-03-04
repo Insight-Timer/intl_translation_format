@@ -183,7 +183,15 @@ abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
       final data = await file.readDataOfExactType<StringFileData>();
       final content = data.contents;
       final messages = parseFile(content, catalog.defaultLocale);
-      messagesByLocale.addEntries(messages.map((e) => e.asEntry()));
+      for (var entry in messages) {
+        if (messagesByLocale[entry.locale] == null) {
+          messagesByLocale[entry.locale] = entry;
+        } else {
+          final messages = messagesByLocale[entry.locale];
+          messages.messages.addAll(entry.messages);
+          messagesByLocale[entry.locale] = messages;
+        }
+      }
     }
 
     catalog.translatedMessages = {};
