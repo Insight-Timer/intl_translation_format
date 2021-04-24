@@ -287,6 +287,8 @@ class SourceElement extends XliffElement {
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
       state.currentTranslationMessage = event.text
+          .replaceAll('BOLD_ELEM_END', '</b>')
+          .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
@@ -298,6 +300,8 @@ class SourceElement extends XliffElement {
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
       state.currentTranslationMessage = event.text
+          .replaceAll('BOLD_ELEM_END', '</b>')
+          .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
@@ -322,6 +326,8 @@ class TargetElement extends XliffElement {
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
       state.currentTargetTranslationMessage = event.text
+          .replaceAll('BOLD_ELEM_END', '</b>')
+          .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
@@ -333,6 +339,8 @@ class TargetElement extends XliffElement {
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
       state.currentTargetTranslationMessage = event.text
+          .replaceAll('BOLD_ELEM_END', '</b>')
+          .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {

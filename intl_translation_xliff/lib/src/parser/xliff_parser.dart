@@ -21,6 +21,8 @@ class XliffParser {
     String key,
   }) {
     final xliffParsed = xliff
+        .replaceAll(RegExp("<\/b>"), 'BOLD_ELEM_END')
+        .replaceAll(RegExp("<b>"), 'BOLD_ELEM_START')
         .replaceAll(RegExp("<\/ph>"), '')
         .replaceAll(RegExp("<ph id=\".\">"), '');
     return XliffParserState(
