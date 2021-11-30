@@ -233,8 +233,7 @@ class _TemplateGenerationTester extends MultilingualGenerateTemplateTester {
       '</xliff>';
 
   @override
-  String get templateMessageWithMetadata =>
-      '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateMessageWithMetadata => '<?xml version="1.0 encoding="UTF-8""?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
       '  <file>\n'
       '    <trans-unit id="messageWithMetadata">\n'
@@ -263,8 +262,7 @@ class _TemplateGenerationTester extends MultilingualGenerateTemplateTester {
       '</xliff>';
 
   @override
-  String get templateVariableMessage =>
-      '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateVariableMessage => '<?xml version="1.0 encoding="UTF-8""?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
       '  <file>\n'
       '    <trans-unit id="messageWithVariable">\n'

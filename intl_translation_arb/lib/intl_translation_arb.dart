@@ -1,10 +1,10 @@
 library intl_translation_arb;
 
 import 'dart:convert';
-import 'package:intl_translation/generate_localized.dart';
-import 'package:intl_translation/src/intl_message.dart';
-import 'package:intl_translation/src/icu_parser.dart';
-import 'package:intl_translation/src/arb_generation.dart';
+import 'package:intl_generator/generate_localized.dart';
+import 'package:intl_generator/src/intl_message.dart';
+import 'package:intl_generator/src/icu_parser.dart';
+import 'package:intl_generator/src/arb_generation.dart';
 import 'package:intl_translation_format/intl_translation_format.dart';
 
 class ArbFormat extends MonoLingualFormat {
@@ -21,15 +21,15 @@ class ArbFormat extends MonoLingualFormat {
   }) {
     final allMessages = <String, dynamic>{
       if (catalog.defaultLocale != null) "@@locale": catalog.defaultLocale,
-      if (catalog.lastModified != null)
-        "@@last_modified": catalog.lastModified.toIso8601String(),
+      if (catalog.lastModified != null) "@@last_modified": catalog.lastModified!.toIso8601String(),
     };
 
     catalog.messages.forEach((k, v) {
-      final messages = Map<String, dynamic>.from(toARB(v,
-          supressMetadata: suppressMetaData,
-          includeSourceText: includeSourceText));
-      allMessages.addAll(messages);
+      if (v != null) {
+        final messages = Map<String, dynamic>.from(
+            toARB(v, supressMetadata: suppressMetaData, includeSourceText: includeSourceText));
+        allMessages.addAll(messages);
+      }
     });
 
     final encoder = JsonEncoder.withIndent('  ');

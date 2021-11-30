@@ -3,13 +3,12 @@ import 'package:intl_translation_format/test_utils.dart';
 
 import 'package:test/test.dart';
 
-dynamic expectExtractedMessages(
-    String fileContent, Map<String, String> messages) async {
+dynamic expectExtractedMessages(String fileContent, Map<String, String> messages) async {
   final file = MockFile(StringFileData(fileContent, 'main.dart'));
   final template = TranslationTemplate('intl');
   await template.addTemplateMessages([file]);
   final result = template.messages.map(
-    (key, value) => MapEntry(key, messageToIcuString(value)),
+    (key, value) => MapEntry(key, messageToIcuString(value!)),
   );
 
   expect(result, messages);
@@ -56,10 +55,8 @@ void main() {
     ''';
 
     // Todo: intl_translation should implement toString in Plurals and Genders
-    await expectExtractedMessages(fileContent, {
-      'pluralExample':
-          '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'
-    });
+    await expectExtractedMessages(fileContent,
+        {'pluralExample': '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'});
   });
 
   test('Extract Embeded Plural Message', () async {

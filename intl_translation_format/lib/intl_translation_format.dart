@@ -12,4 +12,4 @@ export 'src/utils/case_format.dart';
 export 'src/file/local_file.dart';
 export 'src/file/file_provider.dart';
 
-export 'package:intl_translation/src/intl_message.dart';
+export 'package:intl_generator/src/intl_message.dart';

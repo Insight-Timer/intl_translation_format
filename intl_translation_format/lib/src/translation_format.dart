@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:intl_translation/generate_localized.dart';
+import 'package:intl_generator/generate_localized.dart';
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:intl_translation_format/src/file/file_provider.dart';
 import 'package:intl_translation_format/src/utils/formats.dart';
@@ -10,19 +10,19 @@ typedef TranslationFormatBuilder = TranslationFormat Function();
 class MessagesForLocale {
   final Map<String, BasicTranslatedMessage> messages;
 
-  final String locale;
+  final String? locale;
 
   MessagesForLocale(this.messages, {this.locale});
 
-  MapEntry<String, MessagesForLocale> asEntry() => MapEntry(locale, this);
+  MapEntry<String?, MessagesForLocale> asEntry() => MapEntry(locale, this);
 }
 
 abstract class TranslationFormat<T extends FileData> {
   const TranslationFormat();
 
-  void parseFiles(
+  Future<void> parseFiles(
     List<ReadableFile> files, {
-    TranslationCatalog catalog,
+    TranslationCatalog? catalog,
   });
 
   // From a catalog of intl template messages it creates an
@@ -39,11 +39,11 @@ abstract class TranslationFormat<T extends FileData> {
   }
 
   static TranslationFormat fromKey(
-    String key, {
-    Map<String, TranslationFormatBuilder> supportedFormats,
+    String? key, {
+    Map<String, TranslationFormatBuilder>? supportedFormats,
   }) {
     final formats = supportedFormats ?? defaultFormats;
-    final translationFormat = formats[key]?.call();
+    final translationFormat = formats[key!]?.call();
 
     if (translationFormat == null) {
       throw UnsupportedFormatException(key);
@@ -58,7 +58,7 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
 
   MessagesForLocale parseFile(
     String content, {
-    MessageGeneration generation,
+    MessageGeneration? generation,
   });
 
   String generateTemplateFile(
@@ -68,7 +68,7 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
   @override
   Future parseFiles(
     List<ReadableFile> files, {
-    TranslationCatalog catalog,
+    TranslationCatalog? catalog,
   }) async {
     var messagesByLocale = <String, Map<String, BasicTranslatedMessage>>{};
 
@@ -77,17 +77,17 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
     // issue for very large projects.
     for (final file in files) {
       final data = await file.readDataOfExactType<StringFileData>();
-      final messages = parseFile(data.contents);
-      final locale = messages.locale ??
-          localeFromName(data.nameWithoutExtension, catalog.projectName);
+      final contents = data.contents;
+      if (contents != null) {
+        final messages = parseFile(contents);
+        final locale = messages.locale ?? localeFromName(data.nameWithoutExtension, catalog?.projectName ?? '');
 
-      messagesByLocale.putIfAbsent(locale, () => {}).addAll(messages.messages);
+        messagesByLocale.putIfAbsent(locale, () => {}).addAll(messages.messages);
+      }
     }
 
     messagesByLocale.forEach((locale, messages) {
-      catalog.translatedMessages
-          .putIfAbsent(locale, () => [])
-          .addAll(messages.values);
+      catalog!.translatedMessages.putIfAbsent(locale, () => []).addAll(messages.values);
     });
   }
 
@@ -103,9 +103,8 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
   }
 }
 
-abstract class SingleBinaryLanguageFormat
-    extends TranslationFormat<BinaryFileData> {
-  MessagesForLocale parseFile(Uint8List content);
+abstract class SingleBinaryLanguageFormat extends TranslationFormat<BinaryFileData> {
+  MessagesForLocale parseFile(Uint8List? content);
 
   List<String> get supportedFileExtensions => [fileExtension];
   String get fileExtension;
@@ -117,7 +116,7 @@ abstract class SingleBinaryLanguageFormat
   @override
   Future parseFiles(
     List<ReadableFile> files, {
-    TranslationCatalog catalog,
+    TranslationCatalog? catalog,
   }) async {
     var messagesByLocale = <String, Map<String, BasicTranslatedMessage>>{};
 
@@ -127,15 +126,12 @@ abstract class SingleBinaryLanguageFormat
     for (final file in files) {
       final data = await file.readDataOfExactType<BinaryFileData>();
       final messages = parseFile(data.bytes);
-      final locale = messages.locale ??
-          localeFromName(data.nameWithoutExtension, catalog.projectName);
+      final locale = messages.locale ?? localeFromName(data.nameWithoutExtension, catalog!.projectName);
       messagesByLocale.putIfAbsent(locale, () => {}).addAll(messages.messages);
     }
 
     messagesByLocale.forEach((locale, messages) {
-      catalog.translatedMessages
-          .putIfAbsent(locale, () => [])
-          .addAll(messages.values);
+      catalog!.translatedMessages.putIfAbsent(locale, () => []).addAll(messages.values);
     });
   }
 
@@ -163,18 +159,18 @@ abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
   List<String> get supportedFileExtensions => [fileExtension];
   String get fileExtension;
 
-  List<MessagesForLocale> parseFile(String content, String defaultLocale);
+  List<MessagesForLocale?> parseFile(String content, String? defaultLocale);
 
   String generateTemplateFile(
     TranslationTemplate catalog,
   );
 
   @override
-  Future parseFiles(
+  Future<void> parseFiles(
     List<ReadableFile> files, {
-    TranslationCatalog catalog,
+    TranslationCatalog? catalog,
   }) async {
-    final messagesByLocale = <String, MessagesForLocale>{};
+    final messagesByLocale = <String?, MessagesForLocale>{};
 
     // In order to group these by locale, to support multiple input files,
     // we're reading all the data eagerly, which could be a memory
@@ -182,21 +178,23 @@ abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
     for (final file in files) {
       final data = await file.readDataOfExactType<StringFileData>();
       final content = data.contents;
-      final messages = parseFile(content, catalog.defaultLocale);
-      for (var entry in messages) {
-        if (messagesByLocale[entry.locale] == null) {
-          messagesByLocale[entry.locale] = entry;
-        } else {
-          final messages = messagesByLocale[entry.locale];
-          messages.messages.addAll(entry.messages);
-          messagesByLocale[entry.locale] = messages;
+      if (content != null) {
+        final messages = parseFile(content, catalog?.defaultLocale).where((a) => a != null).map((a) => a!).toList();
+        for (var entry in messages) {
+          if (messagesByLocale[entry.locale] == null) {
+            messagesByLocale[entry.locale] = entry;
+          } else {
+            final messages = messagesByLocale[entry.locale]!;
+            messages.messages.addAll(entry.messages);
+            messagesByLocale[entry.locale] = messages;
+          }
         }
       }
     }
 
-    catalog.translatedMessages = {};
+    catalog?.translatedMessages = {};
     messagesByLocale.forEach((locale, messages) {
-      catalog.translatedMessages[locale] = messages.messages.values.toList();
+      catalog?.translatedMessages[locale] = messages.messages.values.toList();
     });
   }
 
@@ -213,7 +211,7 @@ abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
 }
 
 class UnsupportedFormatException implements Exception {
-  String translationFormat;
+  String? translationFormat;
   UnsupportedFormatException(this.translationFormat);
 
   @override

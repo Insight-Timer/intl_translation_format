@@ -22,16 +22,15 @@ import 'dart:io';
 
 import 'package:intl_translation_format/intl_translation_format.dart';
 
-import 'package:intl_translation/src/directory_utils.dart';
+import 'package:intl_generator/src/directory_utils.dart';
 
 main(
   List<String> args, [
-  Map<String, TranslationFormatBuilder> formats,
+  Map<String, TranslationFormatBuilder>? formats,
 ]) async {
   final parser = GenerateArgParser()..parse(args);
 
-  final format =
-      TranslationFormat.fromKey(parser.formatKey, supportedFormats: formats);
+  final format = TranslationFormat.fromKey(parser.formatKey, supportedFormats: formats);
 
   final dartFiles = <String>[
     ...?parser.configuration?.sourceFiles,
@@ -54,7 +53,7 @@ main(
     exit(0);
   }
 
-  final catalog = TranslationCatalog(parser.projectName);
+  final catalog = TranslationCatalog(parser.projectName!);
 
   await catalog.addTemplateMessages(
     dartFiles,
@@ -63,9 +62,7 @@ main(
 
   await catalog.addTranslations(translationFiles, format: format);
 
-  final generatedFiles =
-      catalog.generateDartMessages(config: parser.generationConfig);
+  final generatedFiles = catalog.generateDartMessages(config: parser.generationConfig);
 
-  generatedFiles
-      .forEach((file) => LocalFile(parser.outputDir + file.name).write(file));
+  generatedFiles.forEach((file) => LocalFile(parser.outputDir! + file.name).write(file));
 }

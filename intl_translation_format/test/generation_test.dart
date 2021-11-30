@@ -1,24 +1,19 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:test/test.dart';
 
-void expectTranslatedMessages(
+Future<void> expectTranslatedMessages(
   List<String> files,
   Map<String, Map<String, String>> messagesByLocale,
   String locale,
 ) async {
   final template = TranslationCatalog('intl', locale: locale);
 
-  final mainMessaages = messagesByLocale[locale].map(
-    (name, message) => MapEntry(
-        name,
-        IcuMainMessage(message)
-          ..name = name
-          ..id = name),
+  final mainMessaages = messagesByLocale[locale]!.map(
+    (name, message) => MapEntry(name, IcuMainMessage(message, name)),
   );
 
   template.messages.addAll(mainMessaages);
-  template.originalMessage
-      .addAll(mainMessaages.map((key, value) => MapEntry(key, [value])));
+  template.originalMessage.addAll(mainMessaages.map((key, value) => MapEntry(key, [value])));
 
   for (final messagesForLocale in messagesByLocale.entries) {
     final translatedMessages = messagesForLocale.value.entries.map((e) {
@@ -36,8 +31,7 @@ void expectTranslatedMessages(
   }
 }
 
-localeFileHeader(String locale) =>
-    '// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart\n'
+localeFileHeader(String locale) => '// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart\n'
     '// This is a library that provides messages for a $locale locale. All the\n'
     '// messages from the main program should be duplicated here with the same\n'
     '// function name.\n'
@@ -70,13 +64,11 @@ String mainFileHeader(List<String> locales) => [
           'import \'package:intl/message_lookup_by_library.dart\';\n'
           'import \'package:intl/src/intl_helpers.dart\';\n'
           '\n',
-      for (final locale in locales)
-        'import \'intl_messages_$locale.dart\' deferred as messages_$locale;\n',
+      for (final locale in locales) 'import \'intl_messages_$locale.dart\' deferred as messages_$locale;\n',
       '\n'
           'typedef Future<dynamic> LibraryLoader();\n'
           'Map<String, LibraryLoader> _deferredLibraries = {\n',
-      for (final locale in locales)
-        '  \'$locale\': messages_$locale.loadLibrary,\n',
+      for (final locale in locales) '  \'$locale\': messages_$locale.loadLibrary,\n',
       '};\n'
           '\n'
           'MessageLookupByLibrary _findExact(String localeName) {\n'
@@ -251,10 +243,7 @@ void main() {
       enContent,
       esContent,
     ], {
-      'en': {
-        'pluralExample':
-            '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'
-      },
+      'en': {'pluralExample': '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'},
       'es': {
         'pluralExample':
             '{howMany,plural, =0{Ningún elemento}=1{Un elemento}many{Muchos elementos}other{{howMany} elementos}}'

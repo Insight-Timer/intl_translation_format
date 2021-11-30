@@ -20,8 +20,8 @@ class LocalFile extends FileProvider {
   Future<String> readAsString() => File(path).readAsString();
 
   @override
-  Future writeAsBytes(Uint8List bytes) => File(path).writeAsBytes(bytes);
+  Future writeAsBytes(Uint8List? bytes) => File(path).writeAsBytes(bytes!);
 
   @override
-  Future writeAsString(String contents) => File(path).writeAsString(contents);
+  Future writeAsString(String? contents) => File(path).writeAsString(contents!);
 }

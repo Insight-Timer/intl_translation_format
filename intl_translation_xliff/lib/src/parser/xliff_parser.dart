@@ -21,10 +21,10 @@ class XliffParser {
     String? key,
   }) {
     final xliffParsed = xliff
-        .replaceAll(RegExp("<\/b>"), 'BOLD_ELEM_END')
-        .replaceAll(RegExp("<b>"), 'BOLD_ELEM_START')
-        .replaceAll(RegExp("<\/ph>"), '')
-        .replaceAll(RegExp("<ph id=\".\">"), '');
+        .replaceAll(RegExp('<\/b>'), 'BOLD_ELEM_END')
+        .replaceAll(RegExp('<b>'), 'BOLD_ELEM_START')
+        .replaceAll(RegExp('<\/ph>'), '')
+        .replaceAll(RegExp('<ph id=\".\">'), '');
     return XliffParserState(
       parseEvents(xliffParsed),
       key,
@@ -68,8 +68,7 @@ class XliffParserState extends XmlParserState<List<MessagesForLocale?>> {
     this.version, {
     this.sourceLocale,
     bool displayWarnings = true,
-  })  : assert(events != null),
-        super(
+  }) : super(
           events,
           _key,
           displayWarnings: displayWarnings,
@@ -106,6 +105,5 @@ class XliffParserState extends XmlParserState<List<MessagesForLocale?>> {
       };
 
   @override
-  List<MessagesForLocale?> get value =>
-      [sourceMessages, if (multilingual) targetMessages];
+  List<MessagesForLocale?> get value => [sourceMessages, if (multilingual) targetMessages];
 }

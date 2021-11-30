@@ -47,7 +47,7 @@ class CaseFormat {
   final Case textCase;
   CaseFormat(this.textCase);
 
-  String format(String text) {
+  String? format(String text) {
     final _words = _groupIntoWords(text);
     switch (textCase) {
       case Case.camelCase:
@@ -75,7 +75,6 @@ class CaseFormat {
       case Case.doubleColonCase:
         return _getSnakeCase(_words, separator: '::');
     }
-    return null;
   }
 
   static List<String> _groupIntoWords(String text) {
@@ -85,9 +84,7 @@ class CaseFormat {
 
     for (int i = 0; i < text.length; i++) {
       String char = String.fromCharCode(text.codeUnitAt(i));
-      String nextChar = (i + 1 == text.length
-          ? null
-          : String.fromCharCode(text.codeUnitAt(i + 1)));
+      String? nextChar = (i + 1 == text.length ? null : String.fromCharCode(text.codeUnitAt(i + 1)));
 
       if (_symbolRegex.hasMatch(char)) {
         continue;
@@ -95,9 +92,8 @@ class CaseFormat {
 
       sb.write(char);
 
-      bool isEndOfWord = nextChar == null ||
-          (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
-          _symbolRegex.hasMatch(nextChar);
+      bool isEndOfWord =
+          nextChar == null || (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) || _symbolRegex.hasMatch(nextChar);
 
       if (isEndOfWord) {
         words.add(sb.toString());

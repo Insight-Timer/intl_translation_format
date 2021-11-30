@@ -2,14 +2,17 @@ name: intl_translation_format
 description: This package provides multiformat support for the Intl package
 version: 1.0.0
 homepage: https://github.com/jamesblasco/intl_translation_format
+publish_to: none
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  intl_generator: ^0.2.1
-  intl_translation_arb: ^1.0.0
-  intl_translation_xliff: ^1.0.0
+  intl_generator: ^0.2.0+0
+  intl_translation_arb: 
+    path: ../intl_translation_arb
+  intl_translation_xliff: 
+    path: ../intl_translation_xliff
   yaml: ^3.1.0
   test: ^1.15.1
   path: '>=0.9.0 <2.0.0'
@@ -19,11 +22,5 @@ dependencies:
 
 dev_dependencies:
   analyzer: '>=0.36.0 <2.8.0'
-  dart_style: ^2.2.0
-  intl: '>=0.15.3 <0.17.0'
-
-dependency_overrides:
-  intl_translation_xliff:
-    path: ../intl_translation_xliff
-  intl_translation_arb:
-    path: ../intl_translation_arb
+  dart_style: ^2.1.1
+  intl: '>=0.17.0 <0.20.0'

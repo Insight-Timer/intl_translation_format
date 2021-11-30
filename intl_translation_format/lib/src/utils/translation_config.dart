@@ -1,14 +1,14 @@
-import 'package:intl_translation/extract_messages.dart';
-import 'package:intl_translation/generate_localized.dart';
+import 'package:intl_generator/extract_messages.dart';
+import 'package:intl_generator/generate_localized.dart';
 import 'package:yaml/yaml.dart';
 
 /// Configuration for a traslation catalog.
 /// Defined as a yaml file
 class TranslationConfig {
-  final String projectName;
-  final String outputDir;
-  final String defaultLocale;
-  final String format;
+  final String? projectName;
+  final String? outputDir;
+  final String? defaultLocale;
+  final String? format;
   final List<String> sourceFiles;
   final List<String> translationFiles;
 
@@ -23,7 +23,7 @@ class TranslationConfig {
 
   factory TranslationConfig.fromYaml(
     String content,
-    String fileName,
+    String? fileName,
   ) {
     final yaml = loadYaml(content);
 
@@ -48,9 +48,9 @@ class TranslationConfig {
 }
 
 class GenerationConfig {
-  bool useJson;
-  bool useDeferredLoading;
-  String codegenMode;
+  bool? useJson;
+  bool? useDeferredLoading;
+  String? codegenMode;
 
   GenerationConfig({
     this.useJson,
@@ -59,8 +59,7 @@ class GenerationConfig {
   });
 
   MessageGeneration getMessageGeneration() {
-    final generation =
-        (useJson ?? false) ? JsonMessageGeneration() : MessageGeneration();
+    final generation = (useJson ?? false) ? JsonMessageGeneration() : MessageGeneration();
     generation.useDeferredLoading = useDeferredLoading ?? true;
     generation.codegenMode = codegenMode ?? '';
     return generation;
@@ -68,13 +67,13 @@ class GenerationConfig {
 }
 
 class ExtractConfig {
-  bool suppressLastModified;
-  bool suppressWarnings;
-  bool suppressMetaData;
-  bool warningsAreErrors;
-  bool allowEmbeddedPluralsAndGenders;
-  bool includeSourceText;
-  bool descriptionRequired;
+  bool? suppressLastModified;
+  bool? suppressWarnings;
+  bool? suppressMetaData;
+  bool? warningsAreErrors;
+  bool? allowEmbeddedPluralsAndGenders;
+  bool? includeSourceText;
+  bool? descriptionRequired;
 
   ExtractConfig({
     this.suppressLastModified,

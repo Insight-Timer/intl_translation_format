@@ -59,8 +59,7 @@ void main() {
           </xliff>
       ''';
       try {
-        XliffParser(displayWarnings: false, version: XliffVersion.v1)
-            .parse(content);
+        XliffParser(displayWarnings: false, version: XliffVersion.v1).parse(content);
       } on XliffParserException catch (e) {
         expect(e.title, 'Invalid Xliff version parser');
         return;

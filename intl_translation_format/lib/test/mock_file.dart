@@ -10,12 +10,12 @@ class MockFile extends ReadableFile {
   String get name => data.name;
 
   @override
-  Future<Uint8List> readAsBytes() async {
+  Future<Uint8List?> readAsBytes() async {
     return (data as BinaryFileData).bytes;
   }
 
   @override
-  Future<String> readAsString() async {
+  Future<String?> readAsString() async {
     return (data as StringFileData).contents;
   }
 }

@@ -6,24 +6,24 @@ import 'package:intl_translation_format/src/utils/translation_config.dart';
 import 'formats.dart';
 
 class TranslationArgParser {
-  String projectName;
-  String outputDir;
-  String formatKey;
+  String? projectName;
+  String? outputDir;
+  String? formatKey;
 
-  bool transformer; //Todo: Support transformer and extraction data
+  bool? transformer; //Todo: Support transformer and extraction data
 
-  String _configurationFile;
-  TranslationConfig configuration;
+  String? _configurationFile;
+  TranslationConfig? configuration;
 
-  String sourcesListFile;
+  String? sourcesListFile;
 
-  ExtractConfig extractConfig;
+  ExtractConfig? extractConfig;
 
-  ArgParser parser;
+  ArgParser? parser;
 
-  String get usage => parser?.usage;
+  String? get usage => parser?.usage;
 
-  ExtractConfig parseExtractConfig(ArgParser parser) {
+  ExtractConfig? parseExtractConfig(ArgParser parser) {
     ExtractConfig _extractConfig = ExtractConfig();
     parser.addFlag("suppress-last-modified",
         defaultsTo: false,
@@ -60,9 +60,7 @@ class TranslationArgParser {
   ArgParser createParser(Iterable<String> args) {
     final _parser = ArgParser();
     _parser.addOption("config",
-        abbr: 'c',
-        callback: (x) => _configurationFile = x,
-        help: 'Path of yaml file with configuration.');
+        abbr: 'c', callback: (x) => _configurationFile = x, help: 'Path of yaml file with configuration.');
 
     _parser.addFlag("transformer",
         defaultsTo: false,
@@ -76,9 +74,7 @@ class TranslationArgParser {
         help: 'Your project name will be used in the generated files');
 
     _parser.addOption("output-dir",
-        defaultsTo: '.',
-        callback: (value) => outputDir = value,
-        help: 'Specify the output directory.');
+        defaultsTo: '.', callback: (value) => outputDir = value, help: 'Specify the output directory.');
 
     _parser.addOption("sources-list-file",
         callback: (value) => sourcesListFile = value,
@@ -94,8 +90,7 @@ class TranslationArgParser {
     extractConfig = parseExtractConfig(_parser);
 
     if (args.isEmpty) {
-      print(
-          'Accepts Dart files and produces a intl translate file with the desired format');
+      print('Accepts Dart files and produces a intl translate file with the desired format');
       print('Usage: extract_to_arb [options] [files.dart]');
       print(_parser.usage);
       exit(0);
@@ -109,35 +104,33 @@ class TranslationArgParser {
     parser.parse(args);
 
     if (_configurationFile != null) {
-      final yaml = File(_configurationFile).readAsStringSync();
+      final yaml = File(_configurationFile!).readAsStringSync();
       configuration = TranslationConfig.fromYaml(
         yaml,
         _configurationFile,
       );
 
-      projectName = configuration.projectName ?? projectName;
-      outputDir = configuration.outputDir ?? outputDir;
-      formatKey = configuration.format ?? formatKey;
+      projectName = configuration!.projectName ?? projectName;
+      outputDir = configuration!.outputDir ?? outputDir;
+      formatKey = configuration!.format ?? formatKey;
     }
   }
 }
 
 class ExtractArgParser extends TranslationArgParser {
-  String locale;
+  String? locale;
 
   @override
   ArgParser createParser(Iterable<String> args) {
     final _parser = super.createParser(args);
     _parser.addOption("locale",
-        defaultsTo: null,
-        callback: (value) => locale = value,
-        help: 'Specify the locale set inside the arb file.');
+        defaultsTo: null, callback: (value) => locale = value, help: 'Specify the locale set inside the arb file.');
     return _parser;
   }
 }
 
 class GenerateArgParser extends TranslationArgParser {
-  String translationsListFile;
+  String? translationsListFile;
 
   GenerationConfig generationConfig = GenerationConfig();
 
@@ -148,26 +141,22 @@ class GenerateArgParser extends TranslationArgParser {
     _parser.addFlag('json',
         defaultsTo: false,
         callback: (x) => generationConfig.useJson = x,
-        help:
-            'Generate translations as a JSON string rather than as functions.');
+        help: 'Generate translations as a JSON string rather than as functions.');
 
     _parser.addFlag("use-deferred-loading",
         defaultsTo: true,
         callback: (x) => generationConfig.useDeferredLoading = x,
-        help:
-            'Generate message code that must be loaded with deferred loading. '
+        help: 'Generate message code that must be loaded with deferred loading. '
             'Otherwise, all messages are eagerly loaded.');
     _parser.addOption('codegen_mode',
         allowed: ['release', 'debug'],
         defaultsTo: 'debug',
         callback: (x) => generationConfig.codegenMode = x,
-        help:
-            'What mode to run the code generator in. Either release or debug.');
+        help: 'What mode to run the code generator in. Either release or debug.');
 
     _parser.addOption("translations-list-file",
         callback: (value) => translationsListFile = value,
-        help:
-            'A file that lists the translation files to process, one per line.'
+        help: 'A file that lists the translation files to process, one per line.'
             'The paths in the file can be absolute or relative to the '
             'location of this file.');
 
