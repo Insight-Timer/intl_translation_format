@@ -68,6 +68,7 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
                       });
                     }
                   });
+
                   builder.element('source', nest: () {
                     builder.text(text);
                   });

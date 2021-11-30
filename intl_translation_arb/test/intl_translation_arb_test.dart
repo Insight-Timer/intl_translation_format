@@ -53,6 +53,7 @@ class ArbDefaultFormatTester extends MonolingualFormatTester {
   "simpleMessage": "Simple Message",
   "@simpleMessage": {
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {},
     "source_text": "Simple Message"
   }
@@ -66,6 +67,7 @@ class ArbDefaultFormatTester extends MonolingualFormatTester {
   "@messageWithMetadata": {
     "description": "This is a description",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {},
     "source_text": "Message With Metadata"
   }
@@ -78,6 +80,9 @@ class ArbDefaultFormatTester extends MonolingualFormatTester {
   "messageWithVariable": "Share {variable}",
   "@messageWithVariable": {
     "type": "text",
+    "placeholders_order": [
+      "variable"
+    ],
     "placeholders": {
       "variable": {}
     },
@@ -92,6 +97,9 @@ class ArbDefaultFormatTester extends MonolingualFormatTester {
   "pluralExample": "{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}",
   "@pluralExample": {
     "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
     "placeholders": {
       "howMany": {}
     },
@@ -108,6 +116,7 @@ const _basicArbFile = '''{
   "simpleMessage": "Simple Message",
   "@simpleMessage": {
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {},
     "source_text": "Simple Message"
   },
@@ -115,12 +124,16 @@ const _basicArbFile = '''{
   "@messageWithMetadata": {
     "description": "This is a description",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {},
     "source_text": "Message With Metadata"
   },
   "pluralExample": "{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}",
   "@pluralExample": {
     "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
     "placeholders": {
       "howMany": {}
     },
@@ -129,6 +142,9 @@ const _basicArbFile = '''{
   "messageWithVariable": "Share {variable}",
   "@messageWithVariable": {
     "type": "text",
+    "placeholders_order": [
+      "variable"
+    ],
     "placeholders": {
       "variable": {}
     },

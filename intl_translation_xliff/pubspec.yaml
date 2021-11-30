@@ -9,7 +9,7 @@ environment:
 dependencies:
   intl_translation_format:
     path: ../intl_translation_format
-  xml: ^5.1.0
+  xml: ^5.1.2
 
 dev_dependencies:
   test: ^1.15.0

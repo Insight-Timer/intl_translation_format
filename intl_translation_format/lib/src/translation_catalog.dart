@@ -79,7 +79,7 @@ class TranslationCatalog extends TranslationTemplate {
   Map<String?, List<BasicTranslatedMessage>> translatedMessages = {};
   Map<String, String>? metadata;
 
-  List<String?> get locales => translatedMessages.keys.toList();
+  List<String> get locales => translatedMessages.keys.where((e) => e != null).map((e) => e!).toList();
 
   TranslationCatalog(this.projectName, {String? locale}) : super(projectName, locale: locale);
 
@@ -95,7 +95,7 @@ class TranslationCatalog extends TranslationTemplate {
 
   List<StringFileData> generateDartMessages({GenerationConfig? config}) {
     final generation = (config ?? GenerationConfig()).getMessageGeneration();
-    generation.allLocales.addAll(locales as Iterable<String>);
+    generation.allLocales.addAll(locales);
 
     final nameHasMessageWord = projectName.endsWith('_messages');
     final basenameWithoutMessage =
@@ -130,11 +130,7 @@ class CatalogTranslatedMessage extends TranslatedMessage {
     this.catalog,
   ) : super(name, translated);
 
-  List<MainMessage> get originalMessages => super.originalMessages ?? _findOriginals() ?? [];
-
-  // We know that our [id] is the name of the message, which is used as the
-  //key in [messages].
-  List<MainMessage>? _findOriginals() => originalMessages = catalog.originalMessage[id];
+  List<MainMessage> get originalMessages => super.originalMessages;
 }
 
 /// A TranslatedMessage that just uses the name as the id.
