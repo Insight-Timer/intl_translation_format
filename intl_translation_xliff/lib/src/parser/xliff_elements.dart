@@ -39,11 +39,11 @@ class XliffRootElement extends XliffElement {
   @override
   Set<String> get requiredAttributes => {
         'version',
-        if (state.version == XliffVersion.v2) ...{'srcLang'},
+        if (state!.version == XliffVersion.v2) ...{'srcLang'},
       };
   @override
   Set<String> get optionalAttributes => {
-        if (state.version == XliffVersion.v1) ...{'trgLang'},
+        if (state!.version == XliffVersion.v1) ...{'trgLang'},
         'xml:space',
       };
 
@@ -52,7 +52,7 @@ class XliffRootElement extends XliffElement {
 
   @override
   void onStart() {
-    if (state.sourceMessages != null) {
+    if (state!.sourceMessages != null) {
       throw XliffParserException(
           title: 'Unsupported nested <xliff> element.',
           description:
@@ -63,39 +63,39 @@ class XliffRootElement extends XliffElement {
     final version = attributes['version'];
 
     final parsedVersion = parseVersion(version);
-    if (state.version != parsedVersion) {
+    if (state!.version != parsedVersion) {
       throw XliffParserException(
           title: 'Invalid Xliff version parser',
-          description: 'Using format ${keyForVersion(state.version)}, '
+          description: 'Using format ${keyForVersion(state!.version)}, '
               'while the file format ${version} requires ${parsedVersion}}',
           context: 'In element <xliff>');
     }
 
-    if (state.version == XliffVersion.v2) {
-      final srcLang = attributes['srcLang'];
+    if (state!.version == XliffVersion.v2) {
+      final srcLang = attributes['srcLang']!;
       final trgLang = attributes['trgLang'];
 
-      if (state.sourceLocale != null && srcLang != state.sourceLocale) {
+      if (state!.sourceLocale != null && srcLang != state!.sourceLocale) {
         throw XliffParserException(
             title: 'Invalid \'srcLang\' (source language) attribute: $srcLang.',
             description:
-                '\'srcLang\' was expected to be ${state.sourceLocale} ',
+                '\'srcLang\' was expected to be ${state!.sourceLocale} ',
             context: 'In element <xliff>');
       }
 
       if (trgLang != null) {
-        state.multilingual = true;
+        state!.multilingual = true;
       }
 
-      state.sourceMessages = MessagesForLocale({}, locale: srcLang);
+      state!.sourceMessages = MessagesForLocale({}, locale: srcLang);
 
-      if (state.multilingual) {
-        state.targetMessages = MessagesForLocale({}, locale: trgLang);
+      if (state!.multilingual) {
+        state!.targetMessages = MessagesForLocale({}, locale: trgLang!);
       }
     }
   }
 
-  XliffVersion parseVersion(String version) {
+  XliffVersion parseVersion(String? version) {
     switch (version) {
       case '2.0':
         return XliffVersion.v2;
@@ -106,7 +106,7 @@ class XliffRootElement extends XliffElement {
     }
   }
 
-  String keyForVersion(XliffVersion version) {
+  String? keyForVersion(XliffVersion version) {
     return {
       XliffVersion.v1: 'xlf',
       XliffVersion.v2: 'xlf2',
@@ -132,36 +132,36 @@ class FileElement extends XliffElement {
 
   @override
   Set<String> get requiredAttributes => {
-        if (state.version == XliffVersion.v1) ...{'source-language'},
+        if (state!.version == XliffVersion.v1) ...{'source-language'},
       };
   @override
   Set<String> get optionalAttributes => {
-        if (state.version == XliffVersion.v1) ...{'target-language'},
+        if (state!.version == XliffVersion.v1) ...{'target-language'},
       };
 
   @override
   void onStart() {
-    if (state.version == XliffVersion.v1) {
-      final srcLang = attributes['source-language'];
+    if (state!.version == XliffVersion.v1) {
+      final srcLang = attributes['source-language']!;
       final trgLang = attributes['target-language'];
 
-      if (state.sourceLocale != null && srcLang != state.sourceLocale) {
+      if (state!.sourceLocale != null && srcLang != state!.sourceLocale) {
         throw XliffParserException(
             title:
                 'Invalid \'source-language\' (source language) attribute: $srcLang.',
             description:
-                '\'source-language\' was expected to be ${state.sourceLocale} ',
+                '\'source-language\' was expected to be ${state!.sourceLocale} ',
             context: 'In element <file>');
       }
 
       if (trgLang != null) {
-        state.multilingual = true;
+        state!.multilingual = true;
       }
 
-      state.sourceMessages = MessagesForLocale({}, locale: srcLang);
+      state!.sourceMessages = MessagesForLocale({}, locale: srcLang);
 
-      if (state.multilingual) {
-        state.targetMessages = MessagesForLocale({}, locale: trgLang);
+      if (state!.multilingual) {
+        state!.targetMessages = MessagesForLocale({}, locale: trgLang!);
       }
     }
     warn(
@@ -192,46 +192,46 @@ class UnitElement extends XliffElement {
   Set<String> get requiredAttributes => {'id'};
 
   @override
-  String get key => state.version == XliffVersion.v2 ? 'unit' : 'trans-unit';
+  String get key => state!.version == XliffVersion.v2 ? 'unit' : 'trans-unit';
 
   @override
   void onStart() {
     final id = attributes['id'];
-    assert(state.currentTranslationId == null,
-        'The parser is already parsing a message with id: ${state.currentTranslationId}');
-    state.currentTranslationId = id;
+    assert(state!.currentTranslationId == null,
+        'The parser is already parsing a message with id: ${state!.currentTranslationId}');
+    state!.currentTranslationId = id;
     //warn(id);
   }
 
   @override
   void onEnd() {
-    final id = attributes['id'];
-    assert(state.currentTranslationId != null,
+    final id = attributes['id']!;
+    assert(state!.currentTranslationId != null,
         'The current state is not parsing this element id: $id');
 
-    if (state.sourceMessages.messages[id] != null) {
+    if (state!.sourceMessages!.messages[id] != null) {
       warn(
           'A message with the same id $id already exits and it will be overrided');
     }
-    state.sourceMessages.messages[id] = BasicTranslatedMessage(
+    state!.sourceMessages!.messages[id] = BasicTranslatedMessage(
       id,
-      IcuMessage.fromIcu(state.currentTranslationMessage),
+      IcuMessage.fromIcu(state!.currentTranslationMessage!),
     );
 
-    if (state.multilingual) {
-      if (state.currentTargetTranslationMessage == null) {
+    if (state!.multilingual) {
+      if (state!.currentTargetTranslationMessage == null) {
         throw XliffParserException(
             title: 'No target message found.', context: 'In element <$key>');
       }
-      state.targetMessages.messages[id] = BasicTranslatedMessage(
+      state!.targetMessages!.messages[id] = BasicTranslatedMessage(
         id,
-        IcuMessage.fromIcu(state.currentTargetTranslationMessage),
+        IcuMessage.fromIcu(state!.currentTargetTranslationMessage!),
       );
     }
 
-    state.currentTranslationId = null;
-    state.currentTranslationMessage = null;
-    state.currentTargetTranslationMessage = null;
+    state!.currentTranslationId = null;
+    state!.currentTranslationMessage = null;
+    state!.currentTargetTranslationMessage = null;
   }
 }
 
@@ -286,26 +286,26 @@ class SourceElement extends XliffElement {
   @override
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTranslationMessage = event.text
+      state!.currentTranslationMessage = event.text
           .replaceAll('BOLD_ELEM_END', '</b>')
           .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
-      state.currentTranslationMessage = '';
+      state!.currentTranslationMessage = '';
     }
   }
 
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTranslationMessage = event.text
+      state!.currentTranslationMessage = event.text
           .replaceAll('BOLD_ELEM_END', '</b>')
           .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
-      state.currentTranslationMessage = '';
+      state!.currentTranslationMessage = '';
     }
   }
 }
@@ -325,26 +325,26 @@ class TargetElement extends XliffElement {
   @override
   void parseTextChild(XmlTextEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTargetTranslationMessage = event.text
+      state!.currentTargetTranslationMessage = event.text
           .replaceAll('BOLD_ELEM_END', '</b>')
           .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
-      state.currentTargetTranslationMessage = '';
+      state!.currentTargetTranslationMessage = '';
     }
   }
 
   @override
   void parseCDATAChild(XmlCDATAEvent event) {
     if (event.text != null && event.text.trim().isNotEmpty) {
-      state.currentTargetTranslationMessage = event.text
+      state!.currentTargetTranslationMessage = event.text
           .replaceAll('BOLD_ELEM_END', '</b>')
           .replaceAll('BOLD_ELEM_START', '<b>')
           .replaceAll('\n          ', '')
           .replaceAll('\n        ', '');
     } else {
-      state.currentTargetTranslationMessage = '';
+      state!.currentTargetTranslationMessage = '';
     }
   }
 }

@@ -1,9 +1,9 @@
 import 'package:xml/xml_events.dart';
 
 class XmlParserException implements Exception {
-  final String title;
-  final String description;
-  final String context;
+  final String? title;
+  final String? description;
+  final String? context;
 
   XmlParserException({this.title, this.description, this.context});
 
@@ -21,9 +21,9 @@ class XmlParserException implements Exception {
 abstract class Element<T extends XmlParserState> {
   Element();
 
-  T _state;
+  T? _state;
 
-  T get state {
+  T? get state {
     if (_state == null) {
       throw 'Used state before the xml parse state creates this element';
     }
@@ -33,16 +33,13 @@ abstract class Element<T extends XmlParserState> {
   void _init(T state, Iterable<XmlEventAttribute> _attributes) {
     _state = state;
     depth = state.depth;
-    parent = state.depth == state.currentElement?.depth
-        ? state.currentElement?.parent
-        : state.currentElement;
+    parent = state.depth == state.currentElement?.depth ? state.currentElement?.parent : state.currentElement;
+    var currentDepth = state.elementCountForCurrentDepth[key] ?? 0;
+    currentDepth += 1;
+    state.elementCountForCurrentDepth[key] = currentDepth;
 
-    state.elementCountForCurrentDepth[key] ??= 0;
-    state.elementCountForCurrentDepth[key] += 1;
-
-    if (!allowsMultiple && state.elementCountForCurrentDepth[key] > 1) {
-      throw XmlParserException(
-          title: 'Multiple <$key> elements are not allowed');
+    if (!allowsMultiple && currentDepth > 1) {
+      throw XmlParserException(title: 'Multiple <$key> elements are not allowed');
     }
 
     attributes = Map.fromEntries(
@@ -53,11 +50,11 @@ abstract class Element<T extends XmlParserState> {
   }
 
   void warn(String content) {
-    state.warn(content);
+    state!.warn(content);
   }
 
-  Element parent;
-  int depth;
+  Element? parent;
+  int? depth;
 
   bool get required => false; //Not usable yet
   bool get allowsMultiple => true; //Not usable yet
@@ -70,35 +67,31 @@ abstract class Element<T extends XmlParserState> {
 
   String get key;
 
-  Map<String, String> attributes;
+  late Map<String, String> attributes;
 
-  Iterable<XmlEventAttribute> _verifiedAttributes(
-      Iterable<XmlEventAttribute> attributes) sync* {
-    final _attributes = List.from(attributes);
+  Iterable<XmlEventAttribute> _verifiedAttributes(Iterable<XmlEventAttribute> attributes) sync* {
+    final _attributes = List<XmlEventAttribute?>.from(attributes);
     for (final att in requiredAttributes) {
       final result = _attributes.firstWhere(
-        (e) => e.name == att,
+        (e) => e?.name == att,
         orElse: () => null,
       );
       if (result != null) {
         _attributes.remove(result);
         yield result;
       } else {
-        throw XmlParserException(
-            title: '\'$att\' attribute is required for <$key>');
+        throw XmlParserException(title: '\'$att\' attribute is required for <$key>');
       }
     }
     for (final att in optionalAttributes) {
-      final result =
-          _attributes.firstWhere((e) => e.name == att, orElse: () => null);
+      final result = _attributes.firstWhere((e) => e?.name == att, orElse: () => null);
       if (result != null) {
         _attributes.remove(result);
         yield result;
       }
     }
     if (_attributes.isNotEmpty) {
-      warn(
-          'Extra arguments ${attributes.map((e) => e.name).join(', ')} in <$key> will not be parsed');
+      warn('Extra arguments ${attributes.map((e) => e.name).join(', ')} in <$key> will not be parsed');
     }
   }
 
@@ -115,21 +108,20 @@ abstract class XmlParserState<T> {
     Iterable<XmlEvent> events,
     this._debugKey, {
     this.displayWarnings = true,
-  })  : assert(events != null),
-        _eventIterator = events.iterator;
+  }) : _eventIterator = events.iterator;
 
   // Iterator that contains all the xml events
   final Iterator<XmlEvent> _eventIterator;
 
   // Key for refering parser state while debug
-  final String _debugKey;
+  final String? _debugKey;
 
   // Display warning logs while debug
   bool displayWarnings;
 
   //List<XmlEventAttribute> _currentAttributes;
 
-  XmlStartElementEvent currentStartElement;
+  XmlStartElementEvent? currentStartElement;
 
   /// The current depth of the reader in the XML hierarchy.
   int depth = 0;
@@ -150,9 +142,6 @@ abstract class XmlParserState<T> {
     final subtreeStartDepth = depth;
     while (_eventIterator.moveNext()) {
       final event = _eventIterator.current;
-      if (event == null) {
-        return;
-      }
       var isSelfClosing = false;
       if (event is XmlStartElementEvent) {
         currentStartElement = event;
@@ -173,7 +162,7 @@ abstract class XmlParserState<T> {
     }
   }
 
-  Element currentElement;
+  Element? currentElement;
 
   T get value;
 
@@ -198,11 +187,11 @@ abstract class XmlParserState<T> {
           startElement(event);
           element._init(this, event.attributes);
           currentElement = element;
-          currentElement.onStart();
+          currentElement!.onStart();
         }
       } else if (event is XmlEndElementEvent) {
-        currentElement.onEnd();
-        currentElement = currentElement.parent;
+        currentElement!.onEnd();
+        currentElement = currentElement!.parent;
         endElement(event);
       } else if (event is XmlTextEvent) {
         currentElement?.parseTextChild(event);
@@ -231,7 +220,7 @@ abstract class XmlParserState<T> {
   }
 
   void warn(Object content) {
-    if (displayWarnings) print('${content}, Key: $_debugKey');
+    if (displayWarnings) print('$content, Key: $_debugKey');
   }
 }
 

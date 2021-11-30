@@ -40,7 +40,7 @@ void main() {
           },
         ),
         throwsA(
-          predicate((e) =>
+          predicate((dynamic e) =>
               e is XmlParserException &&
               e.title ==
                   '\'att\' attribute is required for <required-attribute>'),
@@ -127,7 +127,7 @@ void main() {
           },
         ),
         throwsA(
-          predicate((e) =>
+          predicate((dynamic e) =>
               e is XmlParserException &&
               e.title == 'Multiple <one-time> elements are not allowed'),
         ),
@@ -178,14 +178,14 @@ class MockXmlParser {
   });
 
   List<String> parse(String str,
-      {Map<String, ElementBuilder<String>> handlers = const {}, String key}) {
+      {Map<String, ElementBuilder<String>> handlers = const {}, String? key}) {
     return MockXmlParserState(parseEvents(str), key, displayWarnings, handlers)
         .parse();
   }
 }
 
 class MockXmlParserState extends XmlParserState<List<String>> {
-  MockXmlParserState(Iterable<XmlEvent> events, String debugKey,
+  MockXmlParserState(Iterable<XmlEvent> events, String? debugKey,
       bool displayWarnings, this.elementHandlers)
       : super(events, debugKey, displayWarnings: displayWarnings);
 
@@ -218,7 +218,7 @@ class RequiredAttributeElement extends MockElement {
 
   @override
   void onStart() {
-    state.value.add('Attributes for <$key>: ${attributes}');
+    state!.value.add('Attributes for <$key>: ${attributes}');
     super.onStart();
   }
 }
@@ -232,7 +232,7 @@ class OptionalAttributeElement extends MockElement {
 
   @override
   void onStart() {
-    state.value.add('Attributes for <$key>: ${attributes}');
+    state!.value.add('Attributes for <$key>: ${attributes}');
     super.onStart();
   }
 }

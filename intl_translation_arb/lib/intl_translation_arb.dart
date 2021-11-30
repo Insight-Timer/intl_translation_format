@@ -39,7 +39,7 @@ class ArbFormat extends MonoLingualFormat {
   @override
   MessagesForLocale parseFile(
     String content, {
-    MessageGeneration generation,
+    MessageGeneration? generation,
   }) {
     Map<String, BasicTranslatedMessage> messagesFromJson(
       Map<String, dynamic> data,
@@ -68,7 +68,7 @@ const _jsonDecoder = const JsonCodec();
 /// things that are messages, we expect [id] not to start with "@" and
 /// [data] to be a String. For metadata we expect [id] to start with "@"
 /// and [data] to be a Map or null. For metadata we return null.
-BasicTranslatedMessage recreateIntlObjects(String id, data) {
+BasicTranslatedMessage? recreateIntlObjects(String id, data) {
   if (id.startsWith("@")) return null;
   if (data == null) return null;
   var parsed = _pluralAndGenderParser.parse(data).value;

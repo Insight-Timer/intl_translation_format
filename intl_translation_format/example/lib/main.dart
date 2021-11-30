@@ -4,6 +4,8 @@ import 'package:example/locale_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'locale_controller.dart';
+
 void main() {
   runApp(MyApp());
 }
