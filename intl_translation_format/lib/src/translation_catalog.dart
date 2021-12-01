@@ -134,7 +134,7 @@ class CatalogTranslatedMessage extends TranslatedMessage {
 
   // We know that our [id] is the name of the message, which is used as the
   //key in [messages].
-  List<MainMessage> _findOriginals() => originalMessages = catalog.originalMessage[id]!;
+  List<MainMessage> _findOriginals() => originalMessages = catalog.originalMessage[id] ?? [];
 }
 
 /// A TranslatedMessage that just uses the name as the id.
