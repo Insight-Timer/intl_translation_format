@@ -13,7 +13,7 @@ dependencies:
      git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_format
-      ref: null_safe #it-0.0.3
+      ref: null_safe
 
 dev_dependencies:
   analyzer: '>=0.36.0 <2.8.0'
