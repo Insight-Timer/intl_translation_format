@@ -2,6 +2,7 @@ name: intl_translation_arb
 description: Extract messages to arb files and generate translations from arb file
 version: 1.0.0
 homepage: https://github.com/jamesblasco/intl_translation_format
+publish_to: none
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
