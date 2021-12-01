@@ -130,14 +130,18 @@ class CatalogTranslatedMessage extends TranslatedMessage {
     this.catalog,
   ) : super(name, translated);
 
-  List<MainMessage> get originalMessages => super.originalMessages;
+  List<MainMessage> get originalMessages => super.originalMessages.isEmpty ? _findOriginals() : super.originalMessages;
+
+  // We know that our [id] is the name of the message, which is used as the
+  //key in [messages].
+  List<MainMessage> _findOriginals() => originalMessages = catalog.originalMessage[id]!;
 }
 
 /// A TranslatedMessage that just uses the name as the id.
 class BasicTranslatedMessage extends TranslatedMessage {
   BasicTranslatedMessage(
     String name,
-    Message translated,
+    Message? translated,
   ) : super(name, translated);
 
   CatalogTranslatedMessage toCatalogMessage(TranslationCatalog catalog) {

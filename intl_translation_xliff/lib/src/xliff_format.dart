@@ -40,6 +40,7 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
     ...attributesForVersion(version),
     if (version == XliffVersion.v1) ...{
       'version': '1.2',
+      'source-language': template.defaultLocale ?? '',
     } else ...{
       'version': '2.0',
       'srcLang': template.defaultLocale ?? '',

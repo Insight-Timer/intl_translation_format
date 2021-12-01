@@ -39,7 +39,7 @@ void main() {
     Intl.message('Hello \$variable', name: 'variable', args: [variable]);
     ''';
     await expectExtractedMessages(fileContent, {
-      'variable': 'Hello {variable}',
+      'variable': 'Hello <ph id="0">{variable}</ph>',
     });
   });
 
@@ -55,8 +55,10 @@ void main() {
     ''';
 
     // Todo: intl_translation should implement toString in Plurals and Genders
-    await expectExtractedMessages(fileContent,
-        {'pluralExample': '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'});
+    await expectExtractedMessages(fileContent, {
+      'pluralExample':
+          '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{<ph id="0">{howMany}</ph> items}}'
+    });
   });
 
   test('Extract Embeded Plural Message', () async {

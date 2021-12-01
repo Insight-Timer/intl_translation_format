@@ -100,7 +100,7 @@ main() {
       final message = messages['types']!;
       expect(message.name, 'types');
       expect(message.description, 'types');
-      expect(messageToIcuString(message), '{a}, {b}, {c}');
+      expect(messageToIcuString(message), '<ph id="0">{a}</ph>, <ph id="1">{b}</ph>, <ph id="2">{c}</ph>');
       expect(message.arguments, ['a', 'b', 'c']);
     });
 
@@ -140,7 +140,7 @@ main() {
       expect(message.name, 'trickyInterpolation');
       expect(message.description, 'interpolation');
       expect(message.arguments, ['s']);
-      expect(messageToIcuString(message), 'Interpolation is tricky when it ends a sentence like {s}.');
+      expect(messageToIcuString(message), 'Interpolation is tricky when it ends a sentence like <ph id="0">{s}</ph>.');
     });
 
     test('Message with leading quotes', () {
@@ -286,7 +286,7 @@ Skipping invalid Intl.message invocation
       expect(message.name, 'outerSelect');
       expect(message.arguments, ['currency', 'amount']);
       expect(messageToIcuString(message),
-          '{currency,select, CDN{{amount} Canadian dollars}other{{amount} some currency or other.}}');
+          '{currency,select, CDN{<ph id="1">{amount}</ph> Canadian dollars}other{<ph id="1">{amount}</ph> some currency or other.}}');
     });
 
     test('Invalid select message', () {

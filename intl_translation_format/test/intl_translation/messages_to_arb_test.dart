@@ -173,7 +173,7 @@ Skipping invalid Intl.message invocation
       expect(message.name, 'outerSelect');
       expect(message.arguments, ['currency', 'amount']);
       expect(messageToIcuString(message),
-          '{currency,select, CDN{{amount} Canadian dollars}other{{amount} some currency or other.}}');
+          '{currency,select, CDN{<ph id="1">{amount}</ph> Canadian dollars}other{<ph id="1">{amount}</ph> some currency or other.}}');
     });
 
     test('Invalid select message', () {
