@@ -15,16 +15,16 @@ class XliffParser {
     this.multilingual = false,
   });
 
-  List<MessagesForLocale> parse(
+  List<MessagesForLocale?> parse(
     String xliff, {
-    String sourceLocale,
-    String key,
+    String? sourceLocale,
+    String? key,
   }) {
     final xliffParsed = xliff
-        .replaceAll(RegExp("<\/b>"), 'BOLD_ELEM_END')
-        .replaceAll(RegExp("<b>"), 'BOLD_ELEM_START')
-        .replaceAll(RegExp("<\/ph>"), '')
-        .replaceAll(RegExp("<ph id=\".\">"), '');
+        .replaceAll(RegExp('<\/b>'), 'BOLD_ELEM_END')
+        .replaceAll(RegExp('<b>'), 'BOLD_ELEM_START')
+        .replaceAll(RegExp('<\/ph>'), '')
+        .replaceAll(RegExp('<ph id=\".\">'), '');
     return XliffParserState(
       parseEvents(xliffParsed),
       key,
@@ -37,9 +37,9 @@ class XliffParser {
 
 class XliffParserException extends XmlParserException {
   XliffParserException({
-    String title,
-    String description,
-    String context,
+    String? title,
+    String? description,
+    String? context,
   }) : super(
           title: title,
           description: description,
@@ -60,32 +60,31 @@ class XliffParserException extends XmlParserException {
 /// The implementation of [XliffParser].
 ///
 /// Maintains state while pushing an [XmlPushReader] through the XML tree.
-class XliffParserState extends XmlParserState<List<MessagesForLocale>> {
+class XliffParserState extends XmlParserState<List<MessagesForLocale?>> {
   /// Creates a new [XliffParserState].
   XliffParserState(
     Iterable<XmlEvent> events,
-    String _key,
+    String? _key,
     this.version, {
     this.sourceLocale,
     bool displayWarnings = true,
-  })  : assert(events != null),
-        super(
+  }) : super(
           events,
           _key,
           displayWarnings: displayWarnings,
         );
 
   final XliffVersion version;
-  final String sourceLocale;
+  final String? sourceLocale;
 
   bool multilingual = false;
 
-  MessagesForLocale sourceMessages;
-  MessagesForLocale targetMessages;
+  MessagesForLocale? sourceMessages;
+  MessagesForLocale? targetMessages;
 
-  String currentTranslationId;
-  String currentTranslationMessage;
-  String currentTargetTranslationMessage;
+  String? currentTranslationId;
+  String? currentTranslationMessage;
+  String? currentTargetTranslationMessage;
 
   @override
   Map<String, ElementBuilder> get elementHandlers => <String, ElementBuilder>{
@@ -106,6 +105,5 @@ class XliffParserState extends XmlParserState<List<MessagesForLocale>> {
       };
 
   @override
-  List<MessagesForLocale> get value =>
-      [sourceMessages, if (multilingual) targetMessages];
+  List<MessagesForLocale?> get value => [sourceMessages, if (multilingual) targetMessages];
 }

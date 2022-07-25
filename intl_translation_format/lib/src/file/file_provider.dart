@@ -20,15 +20,15 @@ abstract class FileProvider with ReadableFile, WritableFile {
 abstract class ReadableFile {
   String get name;
 
-  Future<String> readAsString();
-  Future<Uint8List> readAsBytes();
+  Future<String?> readAsString();
+  Future<Uint8List?> readAsBytes();
 
   Future<T> readDataOfExactType<T extends FileData>() async {
     final type = FileData.dataTypeForDataOfExactType<T>();
     return await read(type) as T;
   }
 
-  Future<FileData> read(FileDataType type) async {
+  Future<FileData> read(FileDataType? type) async {
     if (type == FileDataType.text) {
       final content = await readAsString();
       return StringFileData(content, name);
@@ -42,18 +42,19 @@ abstract class ReadableFile {
 
 /// File abstraction that can be written
 abstract class WritableFile {
-  Future writeAsString(String content);
+  Future writeAsString(String? content);
 
-  Future writeAsBytes(Uint8List bytes);
+  Future writeAsBytes(Uint8List? bytes);
 
-  Future write(FileData data) async {
+  Future write(FileData? data) async {
+    final contents = data?._contents;
+    final bytes = data?._bytes;
     if (data?.type == FileDataType.text) {
-      return await writeAsString(data._contents);
+      return await writeAsString(contents);
     } else if (data?.type == FileDataType.binary) {
-      return await writeAsBytes(data._bytes);
+      return await writeAsBytes(bytes);
     }
-    throw UnimplementedError(
-        'Write not supported for file type ${data?.type}.');
+    throw UnimplementedError('Write not supported for file type ${data?.type}.');
   }
 }
 
@@ -66,12 +67,12 @@ class FileData {
   String get extension => p.extension(name);
   String get nameWithoutExtension => p.basenameWithoutExtension(name);
 
-  final Uint8List _bytes;
-  final String _contents;
+  final Uint8List? _bytes;
+  final String? _contents;
 
   final Encoding encoding;
 
-  static FileDataType dataTypeForDataOfExactType<T extends FileData>() => {
+  static FileDataType? dataTypeForDataOfExactType<T extends FileData>() => {
         StringFileData: FileDataType.text,
         BinaryFileData: FileDataType.binary,
       }[T];
@@ -79,7 +80,7 @@ class FileData {
   final FileDataType type;
 
   FileData._(
-    String content,
+    String? content,
     this.name, {
     this.encoding = utf8,
   })  : _bytes = null,
@@ -87,7 +88,7 @@ class FileData {
         type = FileDataType.text;
 
   FileData._binary(
-    Uint8List bytes,
+    Uint8List? bytes,
     this.name, {
     this.encoding = utf8,
   })  : _bytes = bytes,
@@ -97,14 +98,14 @@ class FileData {
 
 /// File data that is stored as text
 class StringFileData extends FileData {
-  String get contents => _contents;
+  String? get contents => _contents;
   final Encoding encoding;
 
   static final FileDataType dataType = FileDataType.text;
   final FileDataType type = FileDataType.text;
 
   StringFileData(
-    String contents,
+    String? contents,
     String basename, {
     this.encoding = utf8,
   }) : super._(contents, basename, encoding: encoding);
@@ -112,7 +113,7 @@ class StringFileData extends FileData {
 
 /// File data that is stored as bytes
 class BinaryFileData extends FileData {
-  Uint8List get bytes => _bytes;
+  Uint8List? get bytes => _bytes;
 
   final Encoding encoding;
 
@@ -120,7 +121,7 @@ class BinaryFileData extends FileData {
   final FileDataType data = FileDataType.binary;
 
   BinaryFileData(
-    Uint8List bytes,
+    Uint8List? bytes,
     String basename, {
     this.encoding = utf8,
   }) : super._binary(bytes, basename, encoding: encoding);

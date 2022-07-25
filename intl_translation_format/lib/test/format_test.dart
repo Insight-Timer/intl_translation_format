@@ -1,5 +1,6 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:test/test.dart';
+import 'package:collection/collection.dart';
 
 /// Mock Template used for testing
 ///
@@ -14,7 +15,7 @@ class MockTemplate extends TranslationTemplate {
           locale: locale,
         );
   @override
-  final Map<String, MainMessage> messages;
+  final Map<String, MainMessage?> messages;
 }
 
 /// Compares two message with their icu string version.
@@ -30,13 +31,13 @@ void expectMessage(Message message, Message expected) {
 void expectFormatParsing(
   String content,
   MonoLingualFormat format, {
-  List<MainMessage> messages = const [],
+  List<MainMessage?> messages = const [],
 }) {
   final allTranslations = format.parseFile(content);
 
   for (final translated in allTranslations.messages.values) {
-    final mainMessage = messages.firstWhere((e) => e.name == translated.id);
-    final translatedMessage = translated.message..parent = mainMessage;
+    final mainMessage = messages.firstWhere((e) => e!.name == translated.id)!;
+    final translatedMessage = translated.message!..parent = mainMessage;
     expectMessage(translatedMessage, mainMessage);
   }
 }
@@ -50,17 +51,24 @@ void expectFormatParsing(
 void expectMultiLingualFormatParsing(
   String content,
   MultiLingualFormat format, {
-  Map<String, List<MainMessage>> messages,
+  Map<String, List<MainMessage?>>? messages,
   String defaultLocale = 'en',
 }) {
   final result = format.parseFile(content, defaultLocale);
+  final _messages = messages ?? {};
   for (final translatedForLocale in result) {
-    final locale = translatedForLocale.locale;
-    for (final translated in translatedForLocale.messages.values) {
-      final mainMessage =
-          messages[locale].firstWhere((e) => e.name == translated.id);
-      final translatedMessage = translated.message..parent = mainMessage;
-      expectMessage(translatedMessage, mainMessage);
+    if (translatedForLocale != null) {
+      final locale = translatedForLocale.locale ?? '';
+      for (final translated in translatedForLocale.messages.values) {
+        final _mainMessage = _messages[locale] ?? [];
+        final mainMessage = _mainMessage.firstWhereOrNull((e) => e?.name == translated.id);
+        if (mainMessage != null) {
+          final translatedMessage = translated.message?..parent = mainMessage;
+          if (translatedMessage != null) {
+            expectMessage(translatedMessage, mainMessage);
+          }
+        }
+      }
     }
   }
 }
@@ -70,11 +78,11 @@ void expectMultiLingualFormatParsing(
 void expectFormatTemplateGeneration(
   String content,
   TranslationFormat<StringFileData> format, {
-  List<MainMessage> messages = const [],
+  List<MainMessage?> messages = const [],
 }) {
   final template = MockTemplate(
     'intl',
-    Map.fromEntries(messages.map((e) => MapEntry(e.name, e))),
+    Map.fromEntries(messages.map((e) => MapEntry(e!.name, e))),
   );
   template.lastModified = null;
   final result = format.generateTemplateFiles(template).first.contents;

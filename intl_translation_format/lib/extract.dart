@@ -1,13 +1,12 @@
 library extract;
 
 import 'package:intl_translation_format/intl_translation_format.dart';
-import 'package:intl_translation/src/directory_utils.dart';
+import 'package:intl_generator/src/directory_utils.dart';
 
-main(List<String> args, [Map<String, TranslationFormatBuilder> formats]) async {
+main(List<String> args, [Map<String, TranslationFormatBuilder>? formats]) async {
   final parser = ExtractArgParser()..parse(args);
 
-  final translationFormat =
-      TranslationFormat.fromKey(parser.formatKey, supportedFormats: formats);
+  final translationFormat = TranslationFormat.fromKey(parser.formatKey, supportedFormats: formats);
 
   final dartFiles = <String>[
     ...?parser.configuration?.sourceFiles,
@@ -16,7 +15,7 @@ main(List<String> args, [Map<String, TranslationFormatBuilder> formats]) async {
   ].map((file) => LocalFile(file)).toList();
 
   final template = TranslationTemplate(
-    parser.projectName,
+    parser.projectName!,
     locale: parser.locale,
   );
 
@@ -25,6 +24,6 @@ main(List<String> args, [Map<String, TranslationFormatBuilder> formats]) async {
   final templateFiles = template.generateTemplate(translationFormat);
 
   for (final file in templateFiles) {
-    await LocalFile(parser.outputDir + file.name).write(file);
+    await LocalFile(parser.outputDir! + file.name).write(file);
   }
 }

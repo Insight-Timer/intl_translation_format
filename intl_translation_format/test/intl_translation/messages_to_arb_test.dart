@@ -1,4 +1,4 @@
-import 'package:intl_translation/extract_messages.dart';
+import 'package:intl_generator/extract_messages.dart';
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:intl_translation_format/test_utils.dart';
 import 'package:test/test.dart';
@@ -43,10 +43,8 @@ main() {
           ..examples = {
             'x': 3,
           }
-          ..addPieces([
-            LiteralString('Another message with parameter ', message),
-            VariableSubstitution.named('x', message)
-          ]);
+          ..addPieces(
+              [LiteralString('Another message with parameter ', message), VariableSubstitution.named('x', message)]);
         return message;
       }();
       expectFormatParsing(
@@ -109,12 +107,11 @@ main() {
         args: [n]);
     ''', 'example.dart');
 
-      final message = messages['outerPlural'];
+      final message = messages['outerPlural']!;
       expect(message.name, 'outerPlural');
       expect(message.arguments, ['n']);
 
-      expect(messageToIcuString(message),
-          '{n,plural, =0{none}=1{one}other{some}}');
+      expect(messageToIcuString(message), '{n,plural, =0{none}=1{one}other{some}}');
     });
 
     test('Message with outer gender', () {
@@ -129,12 +126,11 @@ main() {
       args: [g]);
     ''', 'example.dart');
 
-      final message = messages['outerGender'];
+      final message = messages['outerGender']!;
       expect(message.name, 'outerGender');
       expect(message.arguments, ['g']);
 
-      expect(
-          messageToIcuString(message), '{g,select, female{f}male{m}other{o}}');
+      expect(messageToIcuString(message), '{g,select, female{f}male{m}other{o}}');
     });
 
     test('Gender message without name or args', () {
@@ -173,11 +169,11 @@ Skipping invalid Intl.message invocation
         );
     ''', 'example.dart');
 
-      final message = messages['outerSelect'];
+      final message = messages['outerSelect']!;
       expect(message.name, 'outerSelect');
       expect(message.arguments, ['currency', 'amount']);
       expect(messageToIcuString(message),
-          '{currency,select, CDN{{amount} Canadian dollars}other{{amount} some currency or other.}}');
+          '{currency,select, CDN{<ph id="1">{amount}</ph> Canadian dollars}other{<ph id="1">{amount}</ph> some currency or other.}}');
     });
 
     test('Invalid select message', () {
@@ -235,11 +231,11 @@ String differentNameSameContents() => Intl.message("Hello World",
 
     ''', 'example.dart');
 
-      final message = messages['sameContentsDifferentName'];
+      final message = messages['sameContentsDifferentName']!;
       expect(message.name, 'sameContentsDifferentName');
       expect(messageToIcuString(message), 'Hello World');
 
-      final message2 = messages['differentNameSameContents'];
+      final message2 = messages['differentNameSameContents']!;
       expect(message2.name, 'differentNameSameContents');
       expect(messageToIcuString(message2), 'Hello World');
     });
@@ -258,12 +254,12 @@ String rentAsVerb() => Intl.message("rent",
     desc: "The action of renting, as in rent a car");
 ''', 'example.dart');
 
-      final message = messages['rentToBePaid'];
+      final message = messages['rentToBePaid']!;
       expect(message.name, 'rentToBePaid');
       expect(message.meaning, 'Money for rent');
       expect(messageToIcuString(message), 'rent');
 
-      final message2 = messages['rentAsVerb'];
+      final message2 = messages['rentAsVerb']!;
       expect(message2.name, 'rentAsVerb');
       expect(message2.meaning, 'rent as a verb');
       expect(messageToIcuString(message2), 'rent');
@@ -279,7 +275,7 @@ String literalDollar() => Intl.message(
     );
 ''', 'example.dart');
 
-      final message = messages['literalDollar'];
+      final message = messages['literalDollar']!;
       expect(message.name, 'literalDollar');
       expect(messageToIcuString(message), 'Five cents is US\$0.05');
     });
@@ -295,7 +291,7 @@ String extractable() => Intl.message(
     );
 ''', 'example.dart');
 
-      final message = messages['extractable'];
+      final message = messages['extractable']!;
       expect(message.name, 'extractable');
       expect(messageToIcuString(message), 'This message should be extractable');
     });
@@ -371,8 +367,7 @@ String message(String string) =>
         name: 'message', args: [string], examples: {'string': variable});
       ''', 'test.dart');
 
-      expect(extraction.warnings,
-          anyElement(contains('Examples must be a const Map literal.')));
+      expect(extraction.warnings, anyElement(contains('Examples must be a const Map literal.')));
     });
 
     test('fails with message on prefixed expression in interpolation', () {
@@ -383,14 +378,12 @@ String message(String string) =>
       );
       expect(
           extraction.warnings,
-          anyElement(
-              contains('Only simple identifiers and Intl.plural/gender/select '
-                  'expressions are allowed in message interpolation '
-                  'expressions')));
+          anyElement(contains('Only simple identifiers and Intl.plural/gender/select '
+              'expressions are allowed in message interpolation '
+              'expressions')));
     });
 
-    test('fails on call with name referencing variable name inside a function',
-        () {
+    test('fails on call with name referencing variable name inside a function', () {
       final extraction = MessageExtraction();
       extraction.parseContent('''
       class MessageTest {
@@ -432,8 +425,7 @@ String message(String string) =>
           name: 'messageName', desc: 'abc');
       }''', 'main.dart');
 
-      expect(messages.values.map((m) => m.name),
-          anyElement(contains('messageName')));
+      expect(messages.values.map((m) => m.name), anyElement(contains('messageName')));
       expect(extraction.warnings, isEmpty);
     });
 
@@ -456,8 +448,7 @@ String message(String string) =>
           name: 'MessageTest_messageName', desc: 'test');
       }''', 'main.dart');
 
-      expect(messages.values.map((m) => m.name),
-          anyElement(contains('MessageTest_messageName')));
+      expect(messages.values.map((m) => m.name), anyElement(contains('MessageTest_messageName')));
       expect(extraction.warnings, isEmpty);
     });
 
@@ -472,8 +463,7 @@ String message(String string) =>
         }
       }''', 'main.dart');
 
-      expect(messages.values.map((m) => m.name),
-          anyElement(contains('functionName')));
+      expect(messages.values.map((m) => m.name), anyElement(contains('functionName')));
       expect(extraction.warnings, isEmpty);
     });
 
@@ -484,8 +474,7 @@ String message(String string) =>
         String first, second = Intl.message('message string', desc: 'test');
       }''', 'main.dart');
 
-      expect(messages.values.map((m) => m.name),
-          anyElement(contains('message string')));
+      expect(messages.values.map((m) => m.name), anyElement(contains('message string')));
       expect(extraction.warnings, isEmpty);
     });
 
@@ -498,8 +487,7 @@ String message(String string) =>
       }
       ''', 'main.dart');
 
-      expect(
-          messages.values.map((m) => m.name), anyElement(contains('message')));
+      expect(messages.values.map((m) => m.name), anyElement(contains('message')));
       expect(extraction.warnings, isEmpty);
     });
   });

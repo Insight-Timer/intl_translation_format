@@ -25,7 +25,7 @@ class _ParserTesterWithTargetLanguage extends MultilingualParsingTester {
   String get simpleMessage => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en" target-language="es" >
-  <file>
+  <file source-language="en">
     <trans-unit id="simpleMessage">
       <notes>
         <note category="format">icu</note>
@@ -40,7 +40,7 @@ class _ParserTesterWithTargetLanguage extends MultilingualParsingTester {
   String get messageWithMetadata => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en" target-language="es" >
-  <file>
+  <file source-language="en">
     <trans-unit id="messageWithMetadata">
       <notes>
         <note category="format">icu</note>
@@ -56,7 +56,7 @@ class _ParserTesterWithTargetLanguage extends MultilingualParsingTester {
   String get pluralMessage => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en" target-language="es" >
-  <file>
+  <file source-language="en">
     <trans-unit id="pluralExample">
       <notes>
         <note category="format">icu</note>
@@ -70,7 +70,7 @@ class _ParserTesterWithTargetLanguage extends MultilingualParsingTester {
   @override
   String get variableMessage => '''<?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en" target-language="es" >
-  <file>
+  <file source-language="en">
     <trans-unit id="messageWithVariable">
       <notes>
         <note category="format">icu</note>
@@ -85,7 +85,7 @@ class _ParserTesterWithTargetLanguage extends MultilingualParsingTester {
   String get allMessages => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en" target-language="es" >
-  <file>
+  <file source-language="en">
     <trans-unit id="simpleMessage">
       <notes>
         <note category="format">icu</note>
@@ -128,7 +128,7 @@ class _ParserTester extends MultilingualParsingTester {
   String get simpleMessage => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">
-  <file>
+  <file source-language="en">
     <trans-unit id="simpleMessage">
       <notes>
         <note category="format">icu</note>
@@ -142,7 +142,7 @@ class _ParserTester extends MultilingualParsingTester {
   String get messageWithMetadata => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">
-  <file>
+  <file source-language="en">
     <trans-unit id="messageWithMetadata">
       <notes>
         <note category="format">icu</note>
@@ -157,7 +157,7 @@ class _ParserTester extends MultilingualParsingTester {
   String get pluralMessage => '''
 <?xml version="1.0 encoding="UTF-8""?>  
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">
-  <file>
+  <file source-language="en">
     <trans-unit id="pluralExample">
       <notes>
         <note category="format">icu</note>
@@ -171,7 +171,7 @@ class _ParserTester extends MultilingualParsingTester {
   String get variableMessage => '''
 <?xml version="1.0 encoding="UTF-8""?>  
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">
-  <file>
+  <file source-language="en">
     <trans-unit id="messageWithVariable">
       <notes>
         <note category="format">icu</note>
@@ -185,7 +185,7 @@ class _ParserTester extends MultilingualParsingTester {
   String get allMessages => '''
 <?xml version="1.0 encoding="UTF-8""?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">
-  <file>
+  <file source-language="en">
     <trans-unit id="simpleMessage">
       <notes>
         <note category="format">icu</note>
@@ -219,96 +219,104 @@ class _TemplateGenerationTester extends MultilingualGenerateTemplateTester {
   @override
   TranslationFormat<StringFileData> get format => XliffFormat(XliffVersion.v1);
   @override
-  String get templateSimpleMessage => '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateSimpleMessage => '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
-      '  <file>\n'
-      '    <trans-unit id="simpleMessage">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>Simple Message</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
+      '  <file original="self" source-language="en">\n'
+      '    <body>\n'
+      '      <trans-unit id="simpleMessage">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Simple Message]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '    </body>\n'
       '  </file>\n'
       '</xliff>';
 
   @override
-  String get templateMessageWithMetadata =>
-      '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateMessageWithMetadata => '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
-      '  <file>\n'
-      '    <trans-unit id="messageWithMetadata">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '        <note category="description">This is a description</note>\n'
-      '      </notes>\n'
-      '      <source>Message With Metadata</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
+      '  <file original="self" source-language="en">\n'
+      '    <body>\n'
+      '      <trans-unit id="messageWithMetadata">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '          <note category="description">This is a description</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Message With Metadata]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '    </body>\n'
       '  </file>\n'
       '</xliff>';
 
   @override
-  String get templatePluralMessage => '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templatePluralMessage => '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
-      '  <file>\n'
-      '    <trans-unit id="pluralExample">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
+      '  <file original="self" source-language="en">\n'
+      '    <body>\n'
+      '      <trans-unit id="pluralExample">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{<ph id="0">{howMany}</ph> items}}]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '    </body>\n'
       '  </file>\n'
       '</xliff>';
 
   @override
-  String get templateVariableMessage =>
-      '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateVariableMessage => '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
-      '  <file>\n'
-      '    <trans-unit id="messageWithVariable">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>Share {variable}</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
+      '  <file original="self" source-language="en">\n'
+      '    <body>\n'
+      '      <trans-unit id="messageWithVariable">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Share <ph id="0">{variable}</ph>]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '    </body>\n'
       '  </file>\n'
       '</xliff>';
   @override
-  String get templateAllMessages => '<?xml version="1.0 encoding="UTF-8""?>\n'
+  String get templateAllMessages => '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2" source-language="en">\n'
-      '  <file>\n'
-      '    <trans-unit id="simpleMessage">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>Simple Message</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
-      '    <trans-unit id="messageWithMetadata">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '        <note category="description">This is a description</note>\n'
-      '      </notes>\n'
-      '      <source>Message With Metadata</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
-      '    <trans-unit id="pluralExample">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
-      '    <trans-unit id="messageWithVariable">\n'
-      '      <notes>\n'
-      '        <note category="format">icu</note>\n'
-      '      </notes>\n'
-      '      <source>Share {variable}</source>\n'
-      '      <target></target>\n'
-      '    </trans-unit>\n'
+      '  <file original="self" source-language="en">\n'
+      '    <body>\n'
+      '      <trans-unit id="simpleMessage">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Simple Message]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '      <trans-unit id="messageWithMetadata">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '          <note category="description">This is a description</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Message With Metadata]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '      <trans-unit id="pluralExample">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{<ph id="0">{howMany}</ph> items}}]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '      <trans-unit id="messageWithVariable">\n'
+      '        <notes>\n'
+      '          <note category="format">icu</note>\n'
+      '        </notes>\n'
+      '        <source><![CDATA[Share <ph id="0">{variable}</ph>]]></source>\n'
+      '        <target><![CDATA[]]></target>\n'
+      '      </trans-unit>\n'
+      '    </body>\n'
       '  </file>\n'
       '</xliff>';
 }

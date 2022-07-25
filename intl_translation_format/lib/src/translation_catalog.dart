@@ -1,6 +1,6 @@
-import 'package:intl_translation/extract_messages.dart';
-import 'package:intl_translation/generate_localized.dart';
-import 'package:intl_translation/src/intl_message.dart';
+import 'package:intl_generator/extract_messages.dart';
+import 'package:intl_generator/generate_localized.dart';
+import 'package:intl_generator/src/intl_message.dart';
 import 'package:intl_translation_format/src/file/file_provider.dart';
 import 'package:intl_translation_format/src/translation_format.dart';
 import 'package:intl_translation_format/src/utils/translation_config.dart';
@@ -18,39 +18,39 @@ class TranslationTemplate {
   ///
   final String projectName;
 
-  final String defaultLocale;
+  final String? defaultLocale;
 
-  DateTime lastModified = DateTime.now();
+  DateTime? lastModified = DateTime.now();
 
   @visibleForTesting
   Map<String, List<MainMessage>> originalMessage = {};
 
-  final Map<String, MainMessage> messages = {};
+  final Map<String, MainMessage?> messages = {};
 
   TranslationTemplate(
     this.projectName, {
-    String locale,
-  })  : assert(projectName != null),
-        defaultLocale = locale ?? 'en';
+    String? locale,
+  }) : defaultLocale = locale ?? 'en';
 
   /// Extract template messages from Intl classes inside dart files
   Future addTemplateMessages(
     List<ReadableFile> dartFiles, {
-    ExtractConfig config,
+    ExtractConfig? config,
   }) async {
     final extraction = MessageExtraction();
     config?.setToMessageExtraction(extraction);
 
     for (final file in dartFiles) {
       final data = await file.readAsString();
+      if (data != null) {
+        final result = extraction.parseContent(data, file.name, false);
 
-      final result = extraction.parseContent(data, file.name, false);
+        result.forEach((key, value) {
+          originalMessage.putIfAbsent(key, () => <MainMessage>[]).add(value);
+        });
 
-      result.forEach((key, value) {
-        originalMessage.putIfAbsent(key, () => <MainMessage>[]).add(value);
-      });
-
-      messages.addAll(result);
+        messages.addAll(result);
+      }
     }
 
     lastModified = DateTime.now();
@@ -73,20 +73,19 @@ class TranslationCatalog extends TranslationTemplate {
   String projectName;
 
   ///  The default locale
-  String defaultLocale;
-  DateTime lastModified;
+  String? defaultLocale;
+  DateTime? lastModified;
 
-  Map<String, List<BasicTranslatedMessage>> translatedMessages = {};
-  Map<String, String> metadata;
+  Map<String?, List<BasicTranslatedMessage>> translatedMessages = {};
+  Map<String, String>? metadata;
 
-  List<String> get locales => translatedMessages?.keys?.toList() ?? [];
+  List<String> get locales => translatedMessages.keys.where((e) => e != null).map((e) => e!).toList();
 
-  TranslationCatalog(this.projectName, {String locale})
-      : super(projectName, locale: locale);
+  TranslationCatalog(this.projectName, {String? locale}) : super(projectName, locale: locale);
 
   Future addTranslations(
     List<ReadableFile> files, {
-    TranslationFormat format,
+    required TranslationFormat format,
   }) async {
     await format.parseFiles(
       files,
@@ -94,14 +93,13 @@ class TranslationCatalog extends TranslationTemplate {
     );
   }
 
-  List<StringFileData> generateDartMessages({GenerationConfig config}) {
+  List<StringFileData> generateDartMessages({GenerationConfig? config}) {
     final generation = (config ?? GenerationConfig()).getMessageGeneration();
     generation.allLocales.addAll(locales);
 
     final nameHasMessageWord = projectName.endsWith('_messages');
-    final basenameWithoutMessage = nameHasMessageWord
-        ? '${projectName.substring(0, projectName.length - 9)}_'
-        : '${projectName}_';
+    final basenameWithoutMessage =
+        nameHasMessageWord ? '${projectName.substring(0, projectName.length - 9)}_' : '${projectName}_';
 
     final basename = '${basenameWithoutMessage}messages';
     generation.generatedFilePrefix = basenameWithoutMessage;
@@ -109,7 +107,7 @@ class TranslationCatalog extends TranslationTemplate {
     final files = <StringFileData>[];
     translatedMessages.forEach((locale, translation) {
       final messages = translation.map((e) => e.toCatalogMessage(this));
-      final content = generation.contentForLocale(locale, messages);
+      final content = generation.contentForLocale(locale!, messages);
       final file = StringFileData(content, '${basename}_$locale.dart');
       files.add(file);
     });
@@ -128,24 +126,22 @@ class CatalogTranslatedMessage extends TranslatedMessage {
 
   CatalogTranslatedMessage(
     String name,
-    Message translated,
+    Message? translated,
     this.catalog,
   ) : super(name, translated);
 
-  List<MainMessage> get originalMessages =>
-      super.originalMessages ?? _findOriginals();
+  List<MainMessage> get originalMessages => super.originalMessages.isEmpty ? _findOriginals() : super.originalMessages;
 
   // We know that our [id] is the name of the message, which is used as the
   //key in [messages].
-  List<MainMessage> _findOriginals() =>
-      originalMessages = catalog.originalMessage[id];
+  List<MainMessage> _findOriginals() => originalMessages = catalog.originalMessage[id] ?? [];
 }
 
 /// A TranslatedMessage that just uses the name as the id.
 class BasicTranslatedMessage extends TranslatedMessage {
   BasicTranslatedMessage(
     String name,
-    Message translated,
+    Message? translated,
   ) : super(name, translated);
 
   CatalogTranslatedMessage toCatalogMessage(TranslationCatalog catalog) {

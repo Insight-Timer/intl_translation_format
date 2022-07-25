@@ -1,24 +1,19 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:test/test.dart';
 
-void expectTranslatedMessages(
+Future<void> expectTranslatedMessages(
   List<String> files,
   Map<String, Map<String, String>> messagesByLocale,
   String locale,
 ) async {
   final template = TranslationCatalog('intl', locale: locale);
 
-  final mainMessaages = messagesByLocale[locale].map(
-    (name, message) => MapEntry(
-        name,
-        IcuMainMessage(message)
-          ..name = name
-          ..id = name),
+  final mainMessaages = messagesByLocale[locale]!.map(
+    (name, message) => MapEntry(name, IcuMainMessage(message, name)),
   );
 
   template.messages.addAll(mainMessaages);
-  template.originalMessage
-      .addAll(mainMessaages.map((key, value) => MapEntry(key, [value])));
+  template.originalMessage.addAll(mainMessaages.map((key, value) => MapEntry(key, [value])));
 
   for (final messagesForLocale in messagesByLocale.entries) {
     final translatedMessages = messagesForLocale.value.entries.map((e) {
@@ -36,17 +31,16 @@ void expectTranslatedMessages(
   }
 }
 
-localeFileHeader(String locale) =>
-    '// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart\n'
+localeFileHeader(String locale) => '// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart\n'
     '// This is a library that provides messages for a $locale locale. All the\n'
     '// messages from the main program should be duplicated here with the same\n'
     '// function name.\n'
     '\n'
     '// Ignore issues from commonly used lints in this file.\n'
-    '// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new\n'
+    '// ignore_for_file:unnecessary_brace_in_string_interps\n'
     '// ignore_for_file:prefer_single_quotes,comment_references, directives_ordering\n'
     '// ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases\n'
-    '// ignore_for_file:unused_import, file_names\n'
+    '// ignore_for_file:unused_import, file_names, always_declare_return_types\n'
     '\n'
     'import \'package:intl/intl.dart\';\n'
     'import \'package:intl/message_lookup_by_library.dart\';\n'
@@ -58,11 +52,12 @@ String mainFileHeader(List<String> locales) => [
           '// delegating to the appropriate library.\n'
           '\n'
           '// Ignore issues from commonly used lints in this file.\n'
-          '// ignore_for_file:implementation_imports, file_names, unnecessary_new\n'
+          '// ignore_for_file:implementation_imports, file_names\n'
           '// ignore_for_file:unnecessary_brace_in_string_interps, directives_ordering\n'
           '// ignore_for_file:argument_type_not_assignable, invalid_assignment\n'
           '// ignore_for_file:prefer_single_quotes, prefer_generic_function_type_aliases\n'
           '// ignore_for_file:comment_references\n'
+          '// ignore_for_file:avoid_catches_without_on_clauses\n'
           '\n'
           'import \'dart:async\';\n'
           '\n'
@@ -70,16 +65,14 @@ String mainFileHeader(List<String> locales) => [
           'import \'package:intl/message_lookup_by_library.dart\';\n'
           'import \'package:intl/src/intl_helpers.dart\';\n'
           '\n',
-      for (final locale in locales)
-        'import \'intl_messages_$locale.dart\' deferred as messages_$locale;\n',
+      for (final locale in locales) 'import \'intl_messages_$locale.dart\' deferred as messages_$locale;\n',
       '\n'
           'typedef Future<dynamic> LibraryLoader();\n'
           'Map<String, LibraryLoader> _deferredLibraries = {\n',
-      for (final locale in locales)
-        '  \'$locale\': messages_$locale.loadLibrary,\n',
+      for (final locale in locales) '  \'$locale\': messages_$locale.loadLibrary,\n',
       '};\n'
           '\n'
-          'MessageLookupByLibrary _findExact(String localeName) {\n'
+          'MessageLookupByLibrary? _findExact(String localeName) {\n'
           '  switch (localeName) {\n',
       for (final locale in locales)
         '    case \'$locale\':\n'
@@ -91,18 +84,18 @@ String mainFileHeader(List<String> locales) => [
           '\n'
           '/// User programs should call this before using [localeName] for messages.\n'
           'Future<bool> initializeMessages(String localeName) async {\n'
-          '  var availableLocale = Intl.verifiedLocale(\n'
+          '  final availableLocale = Intl.verifiedLocale(\n'
           '    localeName,\n'
           '    (locale) => _deferredLibraries[locale] != null,\n'
           '    onFailure: (_) => null);\n'
           '  if (availableLocale == null) {\n'
-          '    return new Future.value(false);\n'
+          '    return Future.value(false);\n'
           '  }\n'
-          '  var lib = _deferredLibraries[availableLocale];\n'
-          '  await (lib == null ? new Future.value(false) : lib());\n'
-          '  initializeInternalMessageLookup(() => new CompositeMessageLookup());\n'
+          '  final lib = _deferredLibraries[availableLocale];\n'
+          '  await (lib == null ? Future.value(false) : lib());\n'
+          '  initializeInternalMessageLookup(() => CompositeMessageLookup());\n'
           '  messageLookup.addLocale(availableLocale, _findGeneratedMessagesFor);\n'
-          '  return new Future.value(true);\n'
+          '  return Future.value(true);\n'
           '}\n'
           '\n'
           'bool _messagesExistFor(String locale) {\n'
@@ -113,8 +106,8 @@ String mainFileHeader(List<String> locales) => [
           '  }\n'
           '}\n'
           '\n'
-          'MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {\n'
-          '  var actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,\n'
+          'MessageLookupByLibrary? _findGeneratedMessagesFor(String locale) {\n'
+          '  final actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,\n'
           '      onFailure: (_) => null);\n'
           '  if (actualLocale == null) return null;\n'
           '  return _findExact(actualLocale);\n'
@@ -125,29 +118,29 @@ String mainFileHeader(List<String> locales) => [
 void main() {
   test('Simple Message', () async {
     final enContent = '${localeFileHeader('en')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'en\';\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
         '    "simpleMessage" : MessageLookupByLibrary.simpleMessage("Simple Message")\n'
         '  };\n'
         '}\n'
         '';
     final esContent = '${localeFileHeader('es')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'es\';\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
         '    "simpleMessage" : MessageLookupByLibrary.simpleMessage("Mensaje simple")\n'
         '  };\n'
         '}\n'
@@ -164,9 +157,9 @@ void main() {
 
   test('Message with variable', () async {
     final enContent = '${localeFileHeader('en')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'en\';\n'
@@ -174,15 +167,15 @@ void main() {
         '  static m0(variable) => "Hello \${variable}";\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
         '    "variable" : m0\n'
         '  };\n'
         '}\n'
         '';
     final esContent = '${localeFileHeader('es')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'es\';\n'
@@ -190,7 +183,7 @@ void main() {
         '  static m0(variable) => "Hola \${variable}";\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
         '    "variable" : m0\n'
         '  };\n'
         '}\n'
@@ -215,34 +208,34 @@ void main() {
   // https://github.com/dart-lang/intl_translation/blob/b20a558f049730d38f84bbf2f2084163ecddbcba/lib/generate_localized.dart#L488
   test('Message with plural', () async {
     final enContent = '${localeFileHeader('en')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'en\';\n'
         '\n'
-        '  static m1(howMany) => "\${Intl.plural(howMany, zero: \'No items\', one: \'One item\', many: \'A lot of items\', other: \'\${howMany} items\')}";\n'
+        '  static m0(howMany) => "\${Intl.plural(howMany, zero: \'No items\', one: \'One item\', many: \'A lot of items\', other: \'\${howMany} items\')}";\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
-        '    "pluralExample" : m1\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
+        '    "pluralExample" : m0\n'
         '  };\n'
         '}\n'
         '';
     final esContent = '${localeFileHeader('es')}'
-        'final messages = new MessageLookup();\n'
+        'final messages = MessageLookup();\n'
         '\n'
-        'typedef String MessageIfAbsent(String messageStr, List<dynamic> args);\n'
+        'typedef String MessageIfAbsent(String? messageStr, List<Object>? args);\n'
         '\n'
         'class MessageLookup extends MessageLookupByLibrary {\n'
         '  String get localeName => \'es\';\n'
         '\n'
-        '  static m1(howMany) => "\${Intl.plural(howMany, zero: \'Ningún elemento\', one: \'Un elemento\', many: \'Muchos elementos\', other: \'\${howMany} elementos\')}";\n'
+        '  static m0(howMany) => "\${Intl.plural(howMany, zero: \'Ningún elemento\', one: \'Un elemento\', many: \'Muchos elementos\', other: \'\${howMany} elementos\')}";\n'
         '\n'
         '  final messages = _notInlinedMessages(_notInlinedMessages);\n'
-        '  static _notInlinedMessages(_) => <String, Function> {\n'
-        '    "pluralExample" : m1\n'
+        '  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {\n'
+        '    "pluralExample" : m0\n'
         '  };\n'
         '}\n'
         '';
@@ -251,10 +244,7 @@ void main() {
       enContent,
       esContent,
     ], {
-      'en': {
-        'pluralExample':
-            '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'
-      },
+      'en': {'pluralExample': '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}'},
       'es': {
         'pluralExample':
             '{howMany,plural, =0{Ningún elemento}=1{Un elemento}many{Muchos elementos}other{{howMany} elementos}}'

@@ -1,5 +1,5 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
-import 'package:intl_translation/src/intl_message.dart';
+import 'package:intl_generator/src/intl_message.dart';
 import 'package:test/test.dart';
 import 'format_test.dart';
 
@@ -23,28 +23,23 @@ abstract class FormatTester<T> {
   Map<String, MainMessage> get messages {
     return {
       'simpleMessage': IcuMainMessage('Simple Message', 'simpleMessage'),
-      'messageWithMetadata':
-          IcuMainMessage('Message With Metadata', 'messageWithMetadata')
-            ..description = 'This is a description',
+      'messageWithMetadata': IcuMainMessage('Message With Metadata', 'messageWithMetadata')
+        ..description = 'This is a description',
       'pluralExample': IcuMainMessage(
-          '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}',
-          'pluralExample'),
-      'messageWithVariable':
-          IcuMainMessage('Share {variable}', 'messageWithVariable'),
+          '{howMany,plural, =0{No items}=1{One item}many{A lot of items}other{{howMany} items}}', 'pluralExample'),
+      'messageWithVariable': IcuMainMessage('Share {variable}', 'messageWithVariable'),
     };
   }
 
   Map<String, MainMessage> get translatedMessages {
     return {
       'simpleMessage': IcuMainMessage('Mensaje simple', 'simpleMessage'),
-      'messageWithMetadata':
-          IcuMainMessage('Mensaje con Metadatos', 'messageWithMetadata')
-            ..description = 'This is a description',
+      'messageWithMetadata': IcuMainMessage('Mensaje con Metadatos', 'messageWithMetadata')
+        ..description = 'This is a description',
       'pluralExample': IcuMainMessage(
           '{howMany,plural, =0{Ningún elemento}=1{Un elemento}many{Muchos elementos}other{{howMany} elementos}}',
           'pluralExample'),
-      'messageWithVariable':
-          IcuMainMessage('Compartir {variable}', 'messageWithVariable'),
+      'messageWithVariable': IcuMainMessage('Compartir {variable}', 'messageWithVariable'),
     };
   }
 
@@ -62,11 +57,11 @@ abstract class FormatTester<T> {
 /// See alse [MonolingualFormatTester, MultilingualParsingTester]
 abstract class ParsingFormatTester<T> implements FormatTester<T> {
   ///Messages file
-  T get simpleMessage;
-  T get messageWithMetadata;
-  T get pluralMessage;
-  T get variableMessage;
-  T get allMessages;
+  T? get simpleMessage;
+  T? get messageWithMetadata;
+  T? get pluralMessage;
+  T? get variableMessage;
+  T? get allMessages;
 
   testParseFile();
 
@@ -86,11 +81,11 @@ abstract class ParsingFormatTester<T> implements FormatTester<T> {
 /// See alse [MonolingualFormatTester, MultilingualGenerateTemplateTester]
 abstract class GenerateTranslationTester<T> implements FormatTester<T> {
   ///Template file
-  T get templateSimpleMessage;
-  T get templateMessageWithMetadata;
-  T get templatePluralMessage;
-  T get templateVariableMessage;
-  T get templateAllMessages;
+  T? get templateSimpleMessage;
+  T? get templateMessageWithMetadata;
+  T? get templatePluralMessage;
+  T? get templateVariableMessage;
+  T? get templateAllMessages;
 
   testGenerateTemplate();
 
@@ -112,11 +107,11 @@ abstract class MonolingualFormatTester extends FormatTester<String>
   @override
   MonoLingualFormat get format;
 
-  String get templateSimpleMessage => simpleMessage;
-  String get templateMessageWithMetadata => messageWithMetadata;
-  String get templatePluralMessage => pluralMessage;
-  String get templateVariableMessage => variableMessage;
-  String get templateAllMessages => allMessages;
+  String? get templateSimpleMessage => simpleMessage;
+  String? get templateMessageWithMetadata => messageWithMetadata;
+  String? get templatePluralMessage => pluralMessage;
+  String? get templateVariableMessage => variableMessage;
+  String? get templateAllMessages => allMessages;
 
   @override
   _test() {
@@ -130,7 +125,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (simpleMessage != null) {
         test('Simple Message', () {
           expectFormatParsing(
-            simpleMessage,
+            simpleMessage!,
             format,
             messages: [messages['simpleMessage']],
           );
@@ -139,7 +134,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (messageWithMetadata != null) {
         test('Simple Message with Metadata', () {
           expectFormatParsing(
-            messageWithMetadata,
+            messageWithMetadata!,
             format,
             messages: [messages['messageWithMetadata']],
           );
@@ -148,7 +143,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (pluralMessage != null) {
         test('Plural Message', () {
           expectFormatParsing(
-            pluralMessage,
+            pluralMessage!,
             format,
             messages: [messages['pluralExample']],
           );
@@ -157,7 +152,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (variableMessage != null) {
         test('Message with variable', () {
           expectFormatParsing(
-            variableMessage,
+            variableMessage!,
             format,
             messages: [messages['messageWithVariable']],
           );
@@ -166,7 +161,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (allMessages != null) {
         test('Parse file', () {
           expectFormatParsing(
-            pluralMessage,
+            pluralMessage!,
             format,
             messages: messages.values.toList(),
           );
@@ -181,7 +176,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (simpleMessage != null) {
         test('Simple Message', () {
           expectFormatTemplateGeneration(
-            simpleMessage,
+            simpleMessage!,
             format,
             messages: [messages['simpleMessage']],
           );
@@ -191,7 +186,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (messageWithMetadata != null) {
         test('Simple Message with Metadata', () {
           expectFormatTemplateGeneration(
-            messageWithMetadata,
+            messageWithMetadata!,
             format,
             messages: [messages['messageWithMetadata']],
           );
@@ -201,7 +196,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (pluralMessage != null) {
         test('Plural Message', () {
           expectFormatTemplateGeneration(
-            pluralMessage,
+            pluralMessage!,
             format,
             messages: [messages['pluralExample']],
           );
@@ -211,7 +206,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (messageWithMetadata != null) {
         test('Message with Variable', () {
           expectFormatTemplateGeneration(
-            variableMessage,
+            variableMessage!,
             format,
             messages: [messages['messageWithVariable']],
           );
@@ -221,7 +216,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
       if (allMessages != null) {
         test('Multiple messages - full file', () {
           expectFormatTemplateGeneration(
-            allMessages,
+            allMessages!,
             format,
             messages: messages.values.toList(),
           );
@@ -238,8 +233,7 @@ abstract class MonolingualFormatTester extends FormatTester<String>
 ///
 /// See [intl_translation_xliff](https://github.com/jamesblasco/intl_translation_format/blob/master/intl_translation_xliff/test/xliff_v1_test.dart)
 /// for an actual implementation of a [MultilingualParsingTester].
-abstract class MultilingualParsingTester extends FormatTester<String>
-    implements ParsingFormatTester<String> {
+abstract class MultilingualParsingTester extends FormatTester<String> implements ParsingFormatTester<String> {
   @override
   MultiLingualFormat get format;
 
@@ -248,7 +242,7 @@ abstract class MultilingualParsingTester extends FormatTester<String>
     testParseFile();
   }
 
-  Map<String, List<MainMessage>> messagesForKey(String id) {
+  Map<String, List<MainMessage?>> messagesForKey(String id) {
     return {
       'en': [messages[id]],
       'es': [translatedMessages[id]],
@@ -260,7 +254,7 @@ abstract class MultilingualParsingTester extends FormatTester<String>
       if (simpleMessage != null) {
         test('Simple Message', () {
           expectMultiLingualFormatParsing(
-            simpleMessage,
+            simpleMessage!,
             format,
             messages: messagesForKey('simpleMessage'),
           );
@@ -269,7 +263,7 @@ abstract class MultilingualParsingTester extends FormatTester<String>
       if (messageWithMetadata != null) {
         test('Simple Message with Metadata', () {
           expectMultiLingualFormatParsing(
-            messageWithMetadata,
+            messageWithMetadata!,
             format,
             messages: messagesForKey('messageWithMetadata'),
           );
@@ -278,7 +272,7 @@ abstract class MultilingualParsingTester extends FormatTester<String>
       if (pluralMessage != null) {
         test('Plural Message', () {
           expectMultiLingualFormatParsing(
-            pluralMessage,
+            pluralMessage!,
             format,
             messages: messagesForKey('pluralExample'),
           );
@@ -287,15 +281,15 @@ abstract class MultilingualParsingTester extends FormatTester<String>
       if (variableMessage != null) {
         test('Message with variable', () {
           expectMultiLingualFormatParsing(
-            variableMessage,
+            variableMessage!,
             format,
             messages: messagesForKey('messageWithVariable'),
           );
         });
       }
-      if (allMessages != null) {
+      if (allMessages != null && pluralMessage != null) {
         test('Parse file', () {
-          expectMultiLingualFormatParsing(pluralMessage, format, messages: {
+          expectMultiLingualFormatParsing(pluralMessage!, format, messages: {
             'en': messages.values.toList(),
             'es': translatedMessages.values.toList(),
           });
@@ -315,7 +309,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
     testGenerateTemplate();
   }
 
-  Map<String, List<MainMessage>> messagesForKey(String id) {
+  Map<String, List<MainMessage?>> messagesForKey(String id) {
     return {
       'en': [messages[id]],
       'es': [translatedMessages[id]],
@@ -327,7 +321,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
       if (templateSimpleMessage != null) {
         test('Simple Message', () {
           expectFormatTemplateGeneration(
-            templateSimpleMessage,
+            templateSimpleMessage!,
             format,
             messages: [messages['simpleMessage']],
           );
@@ -337,7 +331,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
       if (templateMessageWithMetadata != null) {
         test('Simple Message with Metadata', () {
           expectFormatTemplateGeneration(
-            templateMessageWithMetadata,
+            templateMessageWithMetadata!,
             format,
             messages: [messages['messageWithMetadata']],
           );
@@ -347,7 +341,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
       if (templatePluralMessage != null) {
         test('Plural Message', () {
           expectFormatTemplateGeneration(
-            templatePluralMessage,
+            templatePluralMessage!,
             format,
             messages: [messages['pluralExample']],
           );
@@ -357,7 +351,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
       if (templateVariableMessage != null) {
         test('Message with Variable', () {
           expectFormatTemplateGeneration(
-            templateVariableMessage,
+            templateVariableMessage!,
             format,
             messages: [messages['messageWithVariable']],
           );
@@ -367,7 +361,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
       if (templateAllMessages != null) {
         test('Multiple messages - full file', () {
           expectFormatTemplateGeneration(
-            templateAllMessages,
+            templateAllMessages!,
             format,
             messages: messages.values.toList(),
           );
