@@ -91,7 +91,7 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -137,16 +137,20 @@ packages:
   intl_translation_arb:
     dependency: transitive
     description:
-      path: "/Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_arb"
-      relative: false
-    source: path
+      path: intl_translation_arb
+      ref: stefan_update-dependencies-jan-2023
+      resolved-ref: d9d97312bd18660b749e0a5cf0085e2ec6646042
+      url: "git@github.com:Insight-Timer/intl_translation_format.git"
+    source: git
     version: "1.0.0"
   intl_translation_format:
     dependency: "direct main"
     description:
-      path: "/Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_format"
-      relative: false
-    source: path
+      path: intl_translation_format
+      ref: stefan_update-dependencies-jan-2023
+      resolved-ref: d9d97312bd18660b749e0a5cf0085e2ec6646042
+      url: "git@github.com:Insight-Timer/intl_translation_format.git"
+    source: git
     version: "1.0.0"
   io:
     dependency: transitive
@@ -168,7 +172,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.1"
   logging:
     dependency: transitive
     description:

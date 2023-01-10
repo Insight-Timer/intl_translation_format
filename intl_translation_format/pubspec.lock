@@ -137,16 +137,20 @@ packages:
   intl_translation_arb:
     dependency: "direct main"
     description:
-      path: "/Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_arb"
-      relative: false
-    source: path
+      path: intl_translation_arb
+      ref: stefan_update-dependencies-jan-2023
+      resolved-ref: d9d97312bd18660b749e0a5cf0085e2ec6646042
+      url: "git@github.com:Insight-Timer/intl_translation_format.git"
+    source: git
     version: "1.0.0"
   intl_translation_xliff:
     dependency: "direct main"
     description:
-      path: "/Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_xliff"
-      relative: false
-    source: path
+      path: intl_translation_xliff
+      ref: stefan_update-dependencies-jan-2023
+      resolved-ref: d9d97312bd18660b749e0a5cf0085e2ec6646042
+      url: "git@github.com:Insight-Timer/intl_translation_format.git"
+    source: git
     version: "1.0.0"
   io:
     dependency: transitive
@@ -317,7 +321,7 @@ packages:
     source: hosted
     version: "1.2.1"
   test:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: test
       url: "https://pub.dartlang.org"
