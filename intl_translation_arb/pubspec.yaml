@@ -8,16 +8,17 @@ environment:
   sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
-  intl_generator: ^0.3.0
+  intl_generator: ^0.4.0
   intl_translation_format:
+    # path: /Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_format
     git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_format
-      ref: update_dependencies
+      ref: stefan_update-dependencies-jan-2023
 
 dev_dependencies:
-  analyzer: ^4.0.0
-  args: '>=0.12.1 <2.3.0'
+  analyzer: ^5.0.0
+  args: '>=0.12.1 <2.4.0'
   dart_style: ^2.1.1
   intl: '>=0.17.0 <0.20.0'
   path: '>=0.9.0 <2.0.0'

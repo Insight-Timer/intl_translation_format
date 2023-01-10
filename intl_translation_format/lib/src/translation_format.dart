@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:intl_generator/generate_localized.dart';
 import 'package:intl_translation_format/intl_translation_format.dart';
-import 'package:intl_translation_format/src/file/file_provider.dart';
-import 'package:intl_translation_format/src/utils/formats.dart';
 
 typedef TranslationFormatBuilder = TranslationFormat Function();
 
@@ -53,6 +51,7 @@ abstract class TranslationFormat<T extends FileData> {
 }
 
 abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
+  @override
   List<String> get supportedFileExtensions => [fileExtension];
   String get fileExtension;
 
@@ -93,11 +92,11 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
 
   @override
   List<StringFileData> generateTemplateFiles(
-    TranslationTemplate catalog,
+    TranslationTemplate template,
   ) {
     final file = StringFileData(
-      generateTemplateFile(catalog),
-      '${catalog.projectName}_${catalog.defaultLocale}.$fileExtension',
+      generateTemplateFile(template),
+      '${template.projectName}_${template.defaultLocale}.$fileExtension',
     );
     return [file];
   }
@@ -106,6 +105,7 @@ abstract class MonoLingualFormat extends TranslationFormat<StringFileData> {
 abstract class SingleBinaryLanguageFormat extends TranslationFormat<BinaryFileData> {
   MessagesForLocale parseFile(Uint8List? content);
 
+  @override
   List<String> get supportedFileExtensions => [fileExtension];
   String get fileExtension;
 
@@ -137,11 +137,11 @@ abstract class SingleBinaryLanguageFormat extends TranslationFormat<BinaryFileDa
 
   @override
   List<BinaryFileData> generateTemplateFiles(
-    TranslationTemplate catalog,
+    TranslationTemplate template,
   ) {
     final file = BinaryFileData(
-      generateTemplateFile(catalog),
-      '${catalog.projectName}_${catalog.defaultLocale}.$fileExtension',
+      generateTemplateFile(template),
+      '${template.projectName}_${template.defaultLocale}.$fileExtension',
     );
     return [file];
   }
@@ -156,6 +156,7 @@ String localeFromName(
 }
 
 abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
+  @override
   List<String> get supportedFileExtensions => [fileExtension];
   String get fileExtension;
 
@@ -200,11 +201,11 @@ abstract class MultiLingualFormat extends TranslationFormat<StringFileData> {
 
   @override
   List<StringFileData> generateTemplateFiles(
-    TranslationTemplate catalog,
+    TranslationTemplate template,
   ) {
     final file = StringFileData(
-      generateTemplateFile(catalog),
-      '${catalog.projectName}_${catalog.defaultLocale}.$fileExtension',
+      generateTemplateFile(template),
+      '${template.projectName}_${template.defaultLocale}.$fileExtension',
     );
     return [file];
   }

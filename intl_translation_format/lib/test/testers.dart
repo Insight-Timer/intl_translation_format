@@ -1,6 +1,6 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
-import 'package:intl_generator/src/intl_message.dart';
 import 'package:test/test.dart';
+
 import 'format_test.dart';
 
 void testFormat(FormatTester tester) {
@@ -107,10 +107,15 @@ abstract class MonolingualFormatTester extends FormatTester<String>
   @override
   MonoLingualFormat get format;
 
+  @override
   String? get templateSimpleMessage => simpleMessage;
+  @override
   String? get templateMessageWithMetadata => messageWithMetadata;
+  @override
   String? get templatePluralMessage => pluralMessage;
+  @override
   String? get templateVariableMessage => variableMessage;
+  @override
   String? get templateAllMessages => allMessages;
 
   @override
@@ -249,6 +254,7 @@ abstract class MultilingualParsingTester extends FormatTester<String> implements
     };
   }
 
+  @override
   testParseFile() {
     group('Parse file:', () {
       if (simpleMessage != null) {
@@ -316,6 +322,7 @@ abstract class MultilingualGenerateTemplateTester extends FormatTester<String>
     };
   }
 
+  @override
   testGenerateTemplate() {
     group('Generate template:', () {
       if (templateSimpleMessage != null) {

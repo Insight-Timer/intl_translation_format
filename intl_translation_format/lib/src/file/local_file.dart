@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'file_provider.dart';
 import 'package:path/path.dart' as p;
+
+import 'file_provider.dart';
 
 ///  A reference to a file on the file system.
 class LocalFile extends FileProvider {
@@ -23,5 +24,5 @@ class LocalFile extends FileProvider {
   Future writeAsBytes(Uint8List? bytes) => File(path).writeAsBytes(bytes!);
 
   @override
-  Future writeAsString(String? contents) => File(path).writeAsString(contents!);
+  Future writeAsString(String? content) => File(path).writeAsString(content!);
 }

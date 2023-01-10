@@ -4,8 +4,6 @@ import 'package:example/locale_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'locale_controller.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -22,19 +20,19 @@ class MyApp extends StatelessWidget {
     // current locale changes
     return DefaultLocaleController(
       initialLocale: 'en',
-      availableLocales: ['en', 'es', 'de'],
+      availableLocales: const ['en', 'es', 'de'],
       child: Builder(
         builder: (context) {
           final locale = DefaultLocale.of(context)?.value ?? "en";
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             locale: Locale(locale),
-            title: 'Flutter Demo - ${locale}',
+            title: 'Flutter Demo - $locale',
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: MyHomePage(title: homePageTitle + ' - ${locale}'),
+            home: MyHomePage(title: '$homePageTitle - ${locale}'),
           );
         },
       ),
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -87,30 +85,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Text(counterText(_counter)),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Row(
               children: [
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
                 FloatingActionButton(
                   backgroundColor: _counter != 0 ? null : Colors.grey,
                   onPressed: _counter != 0 ? _decrementCounter : null,
                   tooltip: decrement,
-                  child: Icon(Icons.remove),
+                  child: const Icon(Icons.remove),
                 ),
-                Spacer(),
+                const Spacer(),
                 FloatingActionButton(
                   onPressed: _incrementCounter,
                   tooltip: increment,
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             LocaleSwitcher(),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
           ],
         ),
       ),

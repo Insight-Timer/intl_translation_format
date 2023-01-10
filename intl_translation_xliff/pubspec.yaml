@@ -9,18 +9,19 @@ environment:
 
 dependencies:
   intl_translation_format:
+    # path: /Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_format
     git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_format
-      ref: update_dependencies
+      ref: stefan_update-dependencies-jan-2023
   xml: ^5.1.2
 
 dev_dependencies:
   test: ^1.15.0
-  analyzer: '>=0.36.0 <2.8.0'
-  args: '>=0.12.1 <2.3.0'
+  analyzer: ^5.0.0
+  args: '>=0.12.1 <2.4.0'
   dart_style: ^2.1.1
-  intl: '>=0.15.3 <=0.17.0'
+  intl: '>=0.15.3 <=0.18.0'
   path: '>=0.9.0 <2.0.0'
   petitparser: ^5.0.0
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1

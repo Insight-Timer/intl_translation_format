@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 //import 'l10n/intl_messages_all.dart';
@@ -7,7 +6,7 @@ import 'package:intl/intl.dart';
 // A [ValueNotifier] that stores the current locale,
 // and notifies to their listeners when this changes.
 class LocaleController extends ValueNotifier<String> {
-  List<String> _availableLocales;
+  final List<String> _availableLocales;
 
   LocaleController(String initialLocale, {List<String>? availableLocales})
       : _availableLocales = availableLocales ?? [initialLocale],
@@ -64,8 +63,8 @@ class _DefaultLocaleState extends State<DefaultLocaleController> {
   @override
   Widget build(BuildContext context) {
     return DefaultLocale(
-      child: widget.child,
       localeController: controller,
+      child: widget.child,
     );
   }
 

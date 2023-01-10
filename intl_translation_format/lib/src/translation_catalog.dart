@@ -1,10 +1,7 @@
 import 'package:intl_generator/extract_messages.dart';
 import 'package:intl_generator/generate_localized.dart';
-import 'package:intl_generator/src/intl_message.dart';
-import 'package:intl_translation_format/src/file/file_provider.dart';
-import 'package:intl_translation_format/src/translation_format.dart';
-import 'package:intl_translation_format/src/utils/translation_config.dart';
 import 'package:meta/meta.dart';
+
 import '../intl_translation_format.dart';
 
 ///  Catalog that stores all message templates.
@@ -70,10 +67,13 @@ class TranslationCatalog extends TranslationTemplate {
   ///
   ///  Generated dart files will be named {projectName}_messages_{locale}.dart
   ///  eg: intl_messages.arb
+  @override
   String projectName;
 
   ///  The default locale
+  @override
   String? defaultLocale;
+  @override
   DateTime? lastModified;
 
   Map<String?, List<BasicTranslatedMessage>> translatedMessages = {};
@@ -130,6 +130,7 @@ class CatalogTranslatedMessage extends TranslatedMessage {
     this.catalog,
   ) : super(name, translated);
 
+  @override
   List<MainMessage> get originalMessages => super.originalMessages.isEmpty ? _findOriginals() : super.originalMessages;
 
   // We know that our [id] is the name of the message, which is used as the

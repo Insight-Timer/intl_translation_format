@@ -1,7 +1,7 @@
 library extract;
 
-import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:intl_generator/src/directory_utils.dart';
+import 'package:intl_translation_format/intl_translation_format.dart';
 
 main(List<String> args, [Map<String, TranslationFormatBuilder>? formats]) async {
   final parser = ExtractArgParser()..parse(args);

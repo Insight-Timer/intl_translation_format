@@ -1,9 +1,8 @@
 library intl_translation_arb;
 
 import 'dart:convert';
+
 import 'package:intl_generator/generate_localized.dart';
-import 'package:intl_generator/src/intl_message.dart';
-import 'package:intl_generator/src/icu_parser.dart';
 import 'package:intl_generator/src/arb_generation.dart';
 import 'package:intl_translation_format/intl_translation_format.dart';
 
