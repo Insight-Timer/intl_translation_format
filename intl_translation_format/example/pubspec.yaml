@@ -38,7 +38,7 @@ dev_dependencies:
     git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_format
-      ref: stefan_update-dependencies-jan-2023
+      ref: stefan_update-for-lingohub-changes-feb-2023
   flutter_lints: ^2.0.1
 
 dependency_overrides:

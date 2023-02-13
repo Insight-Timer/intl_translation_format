@@ -1,6 +1,5 @@
 import 'package:intl_translation_format/intl_translation_format.dart';
 import 'package:intl_translation_xliff/src/parser/xliff_parser.dart';
-
 import 'package:xml/xml.dart';
 
 class XliffFormat extends MultiLingualFormat {
@@ -86,15 +85,35 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
                   });
                   if (message.description != null) {
                     builder.element('note', attributes: {'category': 'description'}, nest: () {
-                      builder.text(message.description!);
+                      builder.text(message.description!
+                          .replaceAll('>', 'CLOSE_ELEM_INS_CHAR')
+                          .trim()
+                          .replaceAll('\n', ' ')
+                          .replaceAll(' ', ' ')
+                          .replaceAll('  ', ' ')
+                          .replaceAll('  ', ' '));
                     });
                   }
                 });
                 builder.element('source', nest: () {
-                  builder.cdata(text);
+                  if ((text.contains('&') && !text.contains('<ph id=')) ||
+                      text.contains('<a href=') ||
+                      text.contains('<br>') ||
+                      (text.contains('>') && !text.contains('<'))) {
+                    builder.cdata(text.replaceAll('<', 'OPEN_ELEM_INS'));
+                  } else {
+                    builder.text(text.replaceAll('<', 'OPEN_ELEM_INS'));
+                  }
                 });
                 builder.element('target', nest: () {
-                  builder.cdata('');
+                  if ((text.contains('&') && !text.contains('<ph id=')) ||
+                      text.contains('<a href=') ||
+                      text.contains('<br>') ||
+                      (text.contains('>') && !text.contains('<'))) {
+                    builder.cdata(text.replaceAll('<', 'OPEN_ELEM_INS'));
+                  } else {
+                    builder.text(text.replaceAll('<', 'OPEN_ELEM_INS'));
+                  }
                 });
               });
             }
@@ -107,9 +126,17 @@ String generateTemplate(TranslationTemplate template, XliffVersion version) {
   return builder
       .buildDocument()
       .toXmlString(
-        pretty: true,
-      )
-      // .replaceAll('&lt;', '<')
+          pretty: true,
+          preserveWhitespace: (element) {
+            return element.children
+                    .map<XmlNode?>((e) => e)
+                    .firstWhere((element) => element is XmlText, orElse: () => null) !=
+                null;
+          })
+      .replaceAll('></note>', '/>')
+      .replaceAll('OPEN_ELEM_INS', '<')
+      .replaceAll('CLOSE_ELEM_INS_CHAR', '&gt;')
       .replaceAll('\n          <![CDATA', '<![CDATA')
-      .replaceAll(']]>\n        ', ']]>');
+      .replaceAll(']]>\n        ', ']]>')
+      .replaceAll('</xliff>', '</xliff>\n');
 }

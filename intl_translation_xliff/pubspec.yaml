@@ -13,8 +13,8 @@ dependencies:
     git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_format
-      ref: stefan_update-dependencies-jan-2023
-  xml: ^5.1.2
+      ref: stefan_update-for-lingohub-changes-feb-2023
+  xml: ^6.0.0
 
 dev_dependencies:
   test: ^1.15.0

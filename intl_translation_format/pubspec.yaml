@@ -14,13 +14,13 @@ dependencies:
      git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_arb
-      ref: stefan_update-dependencies-jan-2023
+      ref: stefan_update-for-lingohub-changes-feb-2023
   intl_translation_xliff: 
     # path: /Users/stpu/Documents/work/extlibs/intl_translation_format/intl_translation_xliff
     git: 
       url: git@github.com:Insight-Timer/intl_translation_format.git
       path: intl_translation_xliff
-      ref: stefan_update-dependencies-jan-2023
+      ref: stefan_update-for-lingohub-changes-feb-2023
   yaml: ^3.1.0
   path: '>=0.9.0 <2.0.0'
   petitparser: ^5.0.0
